@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the admin menu module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function easy_admin_schema() {
+  $schema['cache_easy_admin'] = drupal_get_schema_unprocessed('system', 'cache');
+  $schema['cache_easy_admin']['description'] = 'Cache table for easy Admin to store client-side caching hashes.';
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function easy_admin_install() {
+  // Increase the module weight, so easy_admin catches any alterations made by
+  // other modules in hook_menu_alter().
+  db_update('system')
+    ->fields(array('weight' => 100))
+    ->condition('type', 'module')
+    ->condition('name', 'easy_admin')
+    ->execute();
+
+	$menu = array(
+        'menu_name' => 'manager_menu',
+        'title' => 'Manager Menu',
+        'description' => 'Links for content managers that dont need access to all the developer/admin stuff.'
+    );
+
+    menu_save($menu);
+    cache_clear_all('*', 'cache_menu', TRUE);
+
+    drupal_set_message($message = t('The module was successfully installed. '), $type = 'status');
+}
