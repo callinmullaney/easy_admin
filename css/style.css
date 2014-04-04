@@ -42,6 +42,7 @@
 		color: #5f6f81;
 		text-decoration: none;
 		cursor: pointer;
+		padding: 0 12px;
 }
 
 .no-touch .gn-menu-main a:hover,
@@ -57,6 +58,19 @@
 		height: 100%;
 		border-right: 1px solid #c6d0da;
 		text-align: center;
+}
+
+#easy_admin-user li { 
+
+	display: block;
+	float: left;
+	border-right: 1px solid #C6D0DA;
+
+}
+#easy_admin-user li.last { 
+
+	border: none;
+
 }
 
 /* icon-only trigger (menu item) */
@@ -279,26 +293,20 @@ input.gn-search:focus {
 		overflow: hidden;
 }
 
-.gn-icon-menu::before {
-		margin-left: -15px;
-		vertical-align: -2px;
-		width: 30px;
-		height: 3px;
-		background: #5f6f81;
-		box-shadow: 0 3px white, 0 -6px #5f6f81, 0 -9px white, 0 -12px #5f6f81;
-		content: '';
+i.fa-bars {
+	font-size: 28px;
+    padding: 16px 18px;
+    background-color: rgba(0,0,0,0);
+}
+i.fa-bars:hover,
+i.fa-bars.gn-selected {
+
+	cursor: pointer;
+	background-color: rgba(95,111,129,1);
+	color: #fff;
+
 }
 
-.no-touch .gn-icon-menu:hover::before,
-.no-touch .gn-icon-menu.gn-selected:hover::before {
-		background: white;
-		box-shadow: 0 3px #5f6f81, 0 -6px white, 0 -9px #5f6f81, 0 -12px white;
-}
-
-.gn-icon-menu.gn-selected::before {
-		background: #5993cd;
-		box-shadow: 0 3px white, 0 -6px #5993cd, 0 -9px white, 0 -12px #5993cd;
-}
 
 /* styles for opening menu */
 

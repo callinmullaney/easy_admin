@@ -11,7 +11,7 @@
 
 	<li class="gn-trigger">
 	
-		<a class="gn-icon gn-icon-menu"><span>Menu</span></a>
+		<i class="fa fa-bars"></i>
 		
 		<nav id="easy_admin" class="<?php print $classes; ?> gn-menu-wrapper clearfix">
 			<div class="gn-scroller">

@@ -108,7 +108,7 @@ if ( typeof define === 'function' && define.amd ) {
 
 	gnMenu.prototype = {
 		_init : function() {
-			this.trigger = this.el.querySelector( 'a.gn-icon-menu' );
+			this.trigger = this.el.querySelector( 'i.fa-bars' );
 			this.menu = this.el.querySelector( 'nav.gn-menu-wrapper' );
 			this.isMenuOpen = false;
 			this.eventtype = mobilecheck() ? 'touchstart' : 'click';
