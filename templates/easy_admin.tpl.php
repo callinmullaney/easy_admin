@@ -28,12 +28,12 @@
 		<?php print render($easy_admin['easy_admin_home']); ?>
 	</li>
 
-	<li>
-    	<?php print render($easy_admin['easy_admin_user']); ?>
-    </li>
-
     <li>
     	<?php print render($easy_admin['easy_admin_menu']); ?>
+    </li>
+    
+    <li class="easy_admin-user">
+    	<?php print render($easy_admin['easy_admin_user']); ?>
     </li>
 
 </ul>
