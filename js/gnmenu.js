@@ -109,7 +109,7 @@ if ( typeof define === 'function' && define.amd ) {
 	gnMenu.prototype = {
 		_init : function() {
 			this.trigger = this.el.querySelector( 'i.fa-bars' );
-			this.menu = this.el.querySelector( 'nav.gn-menu-wrapper' );
+			this.menu = this.el.querySelector( 'nav.easy-admin-wrapper' );
 			this.isMenuOpen = false;
 			this.eventtype = mobilecheck() ? 'touchstart' : 'click';
 			this._initEvents();
@@ -147,23 +147,23 @@ if ( typeof define === 'function' && define.amd ) {
 			this.menu.addEventListener( this.eventtype, function(ev) { ev.stopPropagation(); } );
 		},
 		_openIconMenu : function() {
-			classie.add( this.menu, 'gn-open-part' );
+			classie.add( this.menu, 'easy-admin-open-part' );
 		},
 		_closeIconMenu : function() {
-			classie.remove( this.menu, 'gn-open-part' );
+			classie.remove( this.menu, 'easy-admin-open-part' );
 		},
 		_openMenu : function() {
 			if( this.isMenuOpen ) return;
-			classie.add( this.trigger, 'gn-selected' );
+			classie.add( this.trigger, 'easy-admin-selected' );
 			this.isMenuOpen = true;
-			classie.add( this.menu, 'gn-open-all' );
+			classie.add( this.menu, 'easy-admin-open-all' );
 			this._closeIconMenu();
 		},
 		_closeMenu : function() {
 			if( !this.isMenuOpen ) return;
-			classie.remove( this.trigger, 'gn-selected' );
+			classie.remove( this.trigger, 'easy-admin-selected' );
 			this.isMenuOpen = false;
-			classie.remove( this.menu, 'gn-open-all' );
+			classie.remove( this.menu, 'easy-admin-open-all' );
 			this._closeIconMenu();
 		}
 	}

@@ -62,7 +62,7 @@ function easy_admin_page_build(&$page) {
   );
   $page['page_bottom']['easy_admin'] = array(
     '#weight' => 25, 
-    '#markup' => '<script>new gnMenu( document.getElementById( \'gn-menu\' ) );</script>',
+    '#markup' => '<script>new gnMenu( document.getElementById( \'easy-admin\' ) );</script>',
   );
 }
 

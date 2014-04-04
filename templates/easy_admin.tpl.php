@@ -7,13 +7,13 @@
  */
 ?>
 <div class="container">
-<ul id="gn-menu" class="gn-menu-main">
+<ul id="easy-admin" class="easy-admin-main">
 
-	<li class="gn-trigger">
+	<li class="easy-admin-trigger">
 	
 		<i class="fa fa-bars"></i>
 		
-		<nav id="easy_admin" class="<?php print $classes; ?> gn-menu-wrapper clearfix">
+		<nav id="easy_admin-menu" class="<?php print $classes; ?> easy-admin-wrapper clearfix">
 			<div class="gn-scroller">
 				<ul class="gn-menu">
     				<li><i class="fa fa-coffee"></i>test</li>
