@@ -117,8 +117,14 @@ body.easy-admin-engulfing.easy-admin-fixed {
 
 .easy-admin ul.menu li a,
 .easy-admin ul.menu span.nolink {
-  line-height: 22px;
-  padding: 4px 6px 4px 7px;
+  	font-family: helvetica neue;
+    font-size: 14px;
+    font-weight: 200;
+    letter-spacing: 0.05em;
+    line-height: 22px;
+    padding: 4px 10px;
+    min-width: 22px;
+    box-sizing: unset;
 }
 
 .easy-admin ul.menu li li a {
@@ -191,3 +197,8 @@ body.easy-admin-engulfing.easy-admin-fixed {
 .easy-admin ul.menu li.logout {
   float: right;
 }
+
+/* eXo patch */
+html.exo-exists #exo-wrapper {
+    margin-top: -30px;
+    }
