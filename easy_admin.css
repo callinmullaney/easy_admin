@@ -1,0 +1,188 @@
+/**
+ * @file
+ * Styling of the easy dropdown menu
+ */
+
+.easy-admin {
+  background-color: #622;
+  height: 30px;
+  width: auto;
+  position: relative;
+  z-index:550; /* higher than overlay (which is 500) */
+}
+
+
+/* Fixed positioning
+   First case: No other toolbars, so no "engulfing" container. */
+
+html body.easy-admin-fixed .easy-admin {
+  top: 0px;
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 998; /* Just less then admin-menu but high enough for overlay */
+}
+html body.easy-admin-fixed {
+  margin-top: 30px;
+}
+
+/* Fixed positioning
+   Second case: There are other toolbars. The javascript then creates a 
+   new container, which all toolbars, including easy admin are moved into */
+
+#easy_admin_engulfing_other_toolbars {
+  position: fixed;
+  top:0;
+  right:0;
+  left:0;
+  z-index:550; /* higher than overlay (which is 500) */
+}
+#easy_admin_engulfing_other_toolbars #admin-menu {
+  position: relative;
+}
+#easy_admin_engulfing_other_toolbars .easy-admin {
+  position: relative;
+}
+
+body.easy-admin-engulfing.admin-menu {
+  margin-top: 0px!important;   /* override admin menu margin */
+}
+body.easy-admin-engulfing,
+body.toolbar {
+  padding-top: 0px!important;   /* override toolbar css on body element */
+}
+body.easy-admin-engulfing.easy-admin-fixed {
+  margin-top: 0px!important;   /* override ordinary fixed positioning */
+}
+
+/* ------------------- */
+
+.easy-admin ul.menu {
+  margin: 0;
+  padding: 0;
+}
+
+.easy-admin > ul.menu {
+  padding-left: 9px;
+  padding-right: 15px;
+}
+
+.easy-admin ul.menu li,
+.easy-admin ul.menu li.expanded {
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+
+.easy-admin ul.menu li,
+.easy-admin ul.menu li.expanded {
+  background-image: none;
+  list-style: none;
+  list-style-image: none;
+  list-style-type: none;
+}
+
+.easy-admin ul.menu li.expanded li.expanded > a {
+  background-image: url(img/nav_white.gif);
+  background-position: right center;
+  background-repeat: no-repeat;
+}
+
+.easy-admin ul.menu li:hover ul.menu {
+  height: 10px;
+  position: absolute;
+  width: auto;
+  z-index: 7000;
+}
+
+.easy-admin ul.menu li ul li {
+  background-color: #444;
+  display: none;
+  width: 160px; /* Width to help Opera out */
+}
+
+.easy-admin ul.menu a {
+  color: #fff;
+  display: block;
+  margin: 0;
+  text-decoration: none;
+}
+
+.easy-admin ul.menu li a {
+  line-height: 22px;
+  padding: 4px 6px 4px 7px;
+}
+
+.easy-admin ul.menu li li a {
+  line-height: 15px;
+  padding: 6px 10px 6px 11px;
+}
+
+.easy-admin li:hover ul ul,
+.easy-admin li:hover ul ul ul,
+.easy-admin li:hover ul ul ul ul,
+.easy-admin li:hover ul ul ul ul ul {
+  display: none;
+  left: -999em;
+}
+
+/* Lists nested under hovered list items */
+.easy-admin li:hover ul,
+.easy-admin li li:hover ul,
+.easy-admin li li li:hover ul,
+.easy-admin li li li li:hover ul,
+.easy-admin li li li li li:hover ul {
+  display: block;
+  left: auto;
+}
+
+.easy-admin ul.menu li:hover li {
+  border-bottom: 1px solid #333;
+  display: block;
+  float: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: 160px;
+}
+
+/* items - hover */
+.easy-admin ul.menu > li:hover > a {
+  -moz-border-radius: 11px; /* For Firefox */
+  -webkit-border-radius: 11px;  /* For Chrome/Safari */
+  background-color: #966;
+  border-radius: 11px; /* W3C */
+}
+
+/* Reset round corners for submenu items  */
+.easy-admin ul.menu > li:hover > ul.menu a {
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
+}
+
+.easy-admin ul.menu li:hover ul {
+  height: auto;
+}
+
+.easy-admin ul.menu li li.first a {
+  text-align: left;
+  width: auto;
+}
+
+.easy-admin ul.menu li:hover ul li ul {
+  margin-left: 160px;
+  top: 0px;
+}
+
+.easy-admin ul.menu li.home > a {
+  background-image: url(img/home.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+  text-indent: -9999px;
+  width: 20px;
+}
+
+.easy-admin ul.menu li.logout {
+  float: right;
+}

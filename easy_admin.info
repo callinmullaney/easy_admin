@@ -1,0 +1,9 @@
+name = Easy Admin
+description = Displays a custom toolbar in top of the window
+core = 7.x
+package = Administration
+configure = admin/config/easy_admin
+
+version = "7.x-1.0"
+project = "easy_admin"
+
