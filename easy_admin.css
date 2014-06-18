@@ -4,7 +4,7 @@
  */
 
 .easy-admin {
-  background-color: #622;
+  background-color: #000;
   height: 30px;
   width: auto;
   position: relative;
@@ -21,6 +21,8 @@ html body.easy-admin-fixed .easy-admin {
   left: 0;
   right: 0;
   z-index: 998; /* Just less then admin-menu but high enough for overlay */
+  box-shadow: 0 0 10px #000;
+  border-bottom: 1px solid #222;
 }
 html body.easy-admin-fixed {
   margin-top: 30px;
@@ -72,6 +74,7 @@ body.easy-admin-engulfing.easy-admin-fixed {
   float: left;
   margin: 0;
   padding: 0;
+  border-right: 1px solid #222;
 }
 
 .easy-admin ul.menu li,
@@ -88,6 +91,9 @@ body.easy-admin-engulfing.easy-admin-fixed {
   background-repeat: no-repeat;
 }
 
+.easy-admin ul.menu li ul.menu li {
+	box-shadow: 0 0 5px #000;
+}
 .easy-admin ul.menu li:hover ul.menu {
   height: 10px;
   position: absolute;
@@ -96,19 +102,21 @@ body.easy-admin-engulfing.easy-admin-fixed {
 }
 
 .easy-admin ul.menu li ul li {
-  background-color: #444;
+  background-color: #222;
   display: none;
   width: 160px; /* Width to help Opera out */
 }
 
-.easy-admin ul.menu a {
+.easy-admin ul.menu a,
+.easy-admin ul.menu span.nolink {
   color: #fff;
   display: block;
   margin: 0;
   text-decoration: none;
 }
 
-.easy-admin ul.menu li a {
+.easy-admin ul.menu li a,
+.easy-admin ul.menu span.nolink {
   line-height: 22px;
   padding: 4px 6px 4px 7px;
 }
@@ -137,7 +145,7 @@ body.easy-admin-engulfing.easy-admin-fixed {
 }
 
 .easy-admin ul.menu li:hover li {
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid #222;
   display: block;
   float: none;
   margin: 0;
@@ -148,10 +156,7 @@ body.easy-admin-engulfing.easy-admin-fixed {
 
 /* items - hover */
 .easy-admin ul.menu > li:hover > a {
-  -moz-border-radius: 11px; /* For Firefox */
-  -webkit-border-radius: 11px;  /* For Chrome/Safari */
-  background-color: #966;
-  border-radius: 11px; /* W3C */
+  background-color: #333;
 }
 
 /* Reset round corners for submenu items  */
