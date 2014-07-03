@@ -1,9 +1,11 @@
 name = Easy Admin
-description = Displays a custom toolbar in top of the window
+description = Creates a content manager menu and displays a toolbar on the top of the screen throughout the site.
 core = 7.x
 package = Administration
 configure = admin/config/easy_admin
+dependencies[] = fawesome
+dependencies[] = special_menu_items
 
-version = "7.x-1.0"
+version = "7.x-1.1"
 project = "easy_admin"
 

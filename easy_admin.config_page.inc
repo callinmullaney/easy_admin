@@ -10,23 +10,10 @@
  */
 function easy_admin_config_form($form, &$form_state) {
 
-  // Get menus for the menu dropdown.
-  $result = db_select('menu_custom')
-    ->fields('menu_custom', array('menu_name', 'title'))
-    ->orderBy('menu_name')
-    ->execute();
-
-  $menus = array();
-
-  while ($record = $result->fetchAssoc()) {
-    $menus[$record['menu_name']] = $record['title'];
-  }
-
   $form['menu'] = array(
-    '#type' => 'select',
+    '#type' => 'hidden',
     '#title' => t('Menu to use for the Easy Admin toolbar'),
-    '#options' => $menus,
-    '#default_value' => variable_get('easy_admin_menu', NULL),
+    '#default_value' => 'manager',
   );
 
   $form['add_home'] = array(
@@ -35,29 +22,10 @@ function easy_admin_config_form($form, &$form_state) {
     '#default_value' => variable_get('easy_admin_add_home', TRUE),
   );
 
-  $form['home_menu'] = array(
-    '#type' => 'select',
-    '#title' => t('Add menu to home link'),
-    '#options' => array_merge(array('_no_menu' => t('Do not add menu to home link')), $menus),
-    '#default_value' => variable_get('easy_admin_home_menu', '_no_menu_'),
-    '#states' => array(
-      'invisible' => array(
-        ':input[name="add_home"]' => array('checked' => FALSE),
-      ),
-    ),
-  );
-
   $form['add_logout'] = array(
     '#type' => 'checkbox',
     '#title' => t('Add logout link to the Easy Admin toolbar (will only show when user is logged in)'),
     '#default_value' => variable_get('easy_admin_add_logout', TRUE),
-  );
-
-  $form['extra_menu'] = array(
-    '#type' => 'select',
-    '#title' => t('Add an extra menu to the Easy Admin toolbar'),
-    '#options' => array_merge(array('_no_menu' => t('Do not add extra menu to toolbar')), $menus),
-    '#default_value' => variable_get('easy_admin_extra_menu', '_no_menu_'),
   );
 
   $form['roles'] = array(
@@ -70,7 +38,7 @@ function easy_admin_config_form($form, &$form_state) {
   $form['show_root'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show for Root (User:1)'),
-    '#default_value' => variable_get('easy_admin_show_root', FALSE),
+    '#default_value' => variable_get('easy_admin_show_root', TRUE),
   );
 
   $form['positioning'] = array(
@@ -113,8 +81,6 @@ function easy_admin_config_form_submit($form, &$form_state) {
   variable_set('easy_admin_show_root', $values['show_root']);
   variable_set('easy_admin_menu', $values['menu']);
   variable_set('easy_admin_add_home', $values['add_home']);
-  variable_set('easy_admin_home_menu', $values['home_menu']);
   variable_set('easy_admin_add_logout', $values['add_logout']);
-  variable_set('easy_admin_extra_menu', $values['extra_menu']);
   variable_set('easy_admin_positioning', $values['positioning']);
 }

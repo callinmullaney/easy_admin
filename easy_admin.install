@@ -8,16 +8,35 @@
  * Implements hook_install().
  */
 function easy_admin_install() {
-  // Increase the wait to come after overlay
-/*
+
+  // Increase the module weight, so easy_admin catches any alterations made by
+  // other modules in hook_menu_alter().
   db_update('system')
-    ->fields(array(
-      'weight' => 1,
-    ))
+    ->fields(array('weight' => 100))
     ->condition('type', 'module')
     ->condition('name', 'easy_admin')
     ->execute();
-*/
+
+  // Create the client admin menu and add some links
+  $menu = array(
+        'menu_name' => 'manager',
+        'title' => 'Manager Menu',
+        'description' => 'Links for content managers that dont need access to all the developer/admin stuff.'
+    );
+  $item = array(
+    'link_path' => '<nolink>',
+    'link_title' => 'Add Content',
+    'menu_name' => 'manager', // Menu machine name, for example: main-menu
+    'weight' => 0,
+    'language' => NULL,
+    'plid' => 0, // Parent menu item, 0 if menu item is on top level
+    'module' => 'menu',
+  );
+  
+  menu_link_save($item);
+
+  menu_save($menu);
+  cache_clear_all('*', 'cache_menu', TRUE);
 
   // Tell user that the module was installed and how to configure it.
   $t = get_t();
