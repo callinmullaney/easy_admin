@@ -11,11 +11,22 @@
   z-index:550; /* higher than overlay (which is 500) */
 }
 
+/* box sizing elements */
+
+.easy-admin,
+.easy-admin ul,
+.easy-admin ul li,
+.easy-admin ul li a,
+.easy-admin ul li span { 
+	-moz-box-sizing: border-box;
+  	-webkit-box-sizing: border-box;
+  	box-sizing: border-box;
+}
 
 /* Fixed positioning
    First case: No other toolbars, so no "engulfing" container. */
 
-html body.easy-admin-fixed .easy-admin {
+.easy-admin {
   top: 0px;
   position: fixed;
   left: 0;
@@ -66,9 +77,12 @@ body.easy-admin-engulfing.easy-admin-fixed {
 /* ------------------- */
 
 .easy-admin ul.menu {
-  margin: 0;
+  margin: 0 0 0 -1px;
   padding: 0;
   z-index: 999;
+  width: 100%;
+  position: relative;
+  display: block;
 }
 
 .easy-admin > ul.menu {
@@ -80,10 +94,12 @@ body.easy-admin-engulfing.easy-admin-fixed {
 }
 .easy-admin ul.menu li,
 .easy-admin ul.menu li.expanded {
-  float: left;
+  display: inline-block;
+  position: relative;
   margin: 0;
   padding: 0;
   border-right: 1px solid #222;
+  width: auto;
 }
 
 .easy-admin ul.menu li,
@@ -104,18 +120,25 @@ body.easy-admin-engulfing.easy-admin-fixed {
 	-moz-box-shadow: 0 4px 6px #000;
 	-webkit-box-shadow: 0 4px 6px #000;
 	box-shadow: 0 4px 6px #000;
+	border-right: 1px solid #222;
+	border-left: 1px solid #222;
+}
+.easy-admin ul.menu li ul.menu {
+	height: 10px;
+  	position: absolute;
+  	width: auto;
+  	z-index: 7000;
+  	width: 100%;
+  	visibility: hidden;
 }
 .easy-admin ul.menu li:hover ul.menu {
-  height: 10px;
-  position: absolute;
-  width: auto;
-  z-index: 7000;
+
+  visibility: visible;
 }
 
 .easy-admin ul.menu li ul li {
-  background-color: #262626;
-  display: none;
-  width: 160px; /* Width to help Opera out */
+  background-color: #333;
+  width: 101.3%; /* Width to help Opera out */
 }
 
 .easy-admin ul.menu a,
@@ -135,20 +158,25 @@ body.easy-admin-engulfing.easy-admin-fixed {
     line-height: 22px;
     padding: 10px;
     min-width: 22px;
-    box-sizing: unset;
+    width: 100%;
+    display: block;
+    position: relative;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .easy-admin ul.menu li li a {
   line-height: 15px;
   padding: 6px 10px 6px 11px;
+  line-height: 1.3em;
 }
 
 .easy-admin li:hover ul ul,
 .easy-admin li:hover ul ul ul,
 .easy-admin li:hover ul ul ul ul,
 .easy-admin li:hover ul ul ul ul ul {
-  display: none;
-  left: -999em;
+  
 }
 
 /* Lists nested under hovered list items */
@@ -157,21 +185,19 @@ body.easy-admin-engulfing.easy-admin-fixed {
 .easy-admin li li li:hover ul,
 .easy-admin li li li li:hover ul,
 .easy-admin li li li li li:hover ul {
-  display: block;
-  left: auto;
+  left: 0;
 }
 
-.easy-admin ul.menu li:hover li {
-  border-bottom: 1px solid #111;
+.easy-admin ul.menu li li {
+  border-bottom: 1px solid #222;
   display: block;
   float: none;
   margin: 0;
   padding: 0;
   position: relative;
-  width: 160px;
 }
 .easy-admin ul.menu li li:hover {
-  border-bottom: 1px solid #FFC00F;
+  border-bottom: 1px solid #e37222;
 }
 
 /* items - hover */
@@ -182,7 +208,10 @@ body.easy-admin-engulfing.easy-admin-fixed {
 }
 .easy-admin ul.menu > li:hover > a:before,
 .easy-admin ul.menu > li:hover > span:before {
-  color: #FFC00F;
+  color: #e37222;
+}
+.easy-admin ul.menu li:hover li a:hover {
+  background-color: #444;
 }
 
 /* Reset round corners for submenu items  */
