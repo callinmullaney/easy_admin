@@ -16,18 +16,6 @@ function easy_admin_config_form($form, &$form_state) {
     '#default_value' => 'manager',
   );
 
-  $form['add_home'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Add home link to the Easy Admin toolbar'),
-    '#default_value' => variable_get('easy_admin_add_home', TRUE),
-  );
-
-  $form['add_logout'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Add logout link to the Easy Admin toolbar (will only show when user is logged in)'),
-    '#default_value' => variable_get('easy_admin_add_logout', TRUE),
-  );
-
   $form['roles'] = array(
     '#type' => 'checkboxes',
     '#title' => t('Display the menu for the following roles:'),
@@ -39,16 +27,6 @@ function easy_admin_config_form($form, &$form_state) {
     '#type' => 'checkbox',
     '#title' => t('Show for Root (User:1)'),
     '#default_value' => variable_get('easy_admin_show_root', TRUE),
-  );
-
-  $form['positioning'] = array(
-    '#type' => 'radios',
-    '#title' => t('Positioning'),
-    '#options' => array(
-      'relative' => t('Relative'),
-      'fixed' => t('Fixed'),
-    ),
-    '#default_value' => variable_get('easy_admin_positioning', 'fixed'),
   );
 
   $form['submit'] = array(
@@ -80,7 +58,4 @@ function easy_admin_config_form_submit($form, &$form_state) {
   variable_set('easy_admin_roles', $roles);
   variable_set('easy_admin_show_root', $values['show_root']);
   variable_set('easy_admin_menu', $values['menu']);
-  variable_set('easy_admin_add_home', $values['add_home']);
-  variable_set('easy_admin_add_logout', $values['add_logout']);
-  variable_set('easy_admin_positioning', $values['positioning']);
 }

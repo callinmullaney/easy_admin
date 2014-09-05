@@ -5,6 +5,7 @@
  * Display a dropdown menu at the top of the window.
  */
 
+
 /**
  * Implements hook_menu().
  */
@@ -16,10 +17,11 @@ function easy_admin_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('easy_admin_config_form'),
     'access arguments' => array('administer easy admin'),
-    'file' => 'easy_admin.config_page.inc',
+    'file' => 'inc/easy_admin.config_page.inc',
   );
 
   return $items;
+
 }
 
 /**
@@ -89,11 +91,11 @@ function easy_admin_page_alter(&$page) {
   );
 
   if (variable_get('easy_admin_positioning', 'fixed') == 'fixed') {
-    drupal_add_js(drupal_get_path('module', 'easy_admin') . '/easy_admin_fixed.js');
+    drupal_add_js(drupal_get_path('module', 'easy_admin') . '/assets/js/easy_admin_fixed.js');
   }
   else {
     if (module_exists('admin_menu') || module_exists('toolbar')) {
-      drupal_add_js(drupal_get_path('module', 'easy_admin') . '/easy_admin_relative.js');
+      drupal_add_js(drupal_get_path('module', 'easy_admin') . '/assets/js/easy_admin_relative.js');
     }
   }
 
@@ -120,6 +122,7 @@ function easy_admin_overlay_child_initialize() {
   if ($offset) {
     drupal_add_css('body.overlay { padding-top: ' . $offset . 'px!important; }', array('type' => 'inline', 'group' => CSS_THEME+1));
   }
+
 }
 
 /**
@@ -146,46 +149,16 @@ function easy_admin_create_menu_item($title, $href, $classes = array(), $localiz
 /**
  *  Create the easy admin.
  *
- *  If it turns out not to include any items besides Home and Logout, an empty
- *  string is returned.
  */
 function easy_admin_output() {
+
   $menu_name = variable_get('easy_admin_menu', '');
+  $menu_name_user = 'user-menu';
 
   $tree = easy_admin_get_tree($menu_name);
+  $tree_user = easy_admin_get_tree($menu_name_user);
 
-  $extra_menu_name = variable_get('easy_admin_extra_menu', '_no_extra_menu_');
-  if ($extra_menu_name != '_no_extra_menu_') {
-    $extra_tree = easy_admin_get_tree($extra_menu_name);
-    foreach ($extra_tree as $subtree) {
-      array_push($tree, $subtree);
-    }
-  }
-
-  if (count($tree) == 0) {
-    // Don't show any menu if there are no links (besides Home and Logout).
-    // (this behaviour was decided here: http://drupal.org/node/1464194)
-    return '';
-  }
-
-  if (variable_get('easy_admin_add_home', TRUE)) {
-    $home = easy_admin_create_menu_item(t('Home'), '<front>', array('home'));
-    $home_menu_name = variable_get('easy_admin_home_menu', '_no_menu_');
-    if ($home_menu_name != '_no_menu_') {
-      $home['children'] = easy_admin_get_tree($home_menu_name);
-    }
-    array_unshift($tree, $home);
-  }
-
-  if (variable_get('easy_admin_add_logout', TRUE) && user_is_logged_in()) {
-    $logout = easy_admin_create_menu_item(t('Log out'), 'user/logout', array('logout'));
-
-    // allow other modules to alter the logout link
-    drupal_alter('easy_admin_logout', $logout);
-    array_push($tree, $logout);
-  }
-
-  return theme('easy_admin_toolbar', array('tree' => $tree));
+  return theme('easy_admin_toolbar', array('tree' => $tree,'tree_user' => $tree_user));
 }
 
 /**
@@ -198,11 +171,14 @@ function easy_admin_output() {
  * @ingroup themeable
  */
 function theme_easy_admin_toolbar($variables) {
-  drupal_add_css(drupal_get_path('module', 'easy_admin') . '/easy_admin.css');
+  drupal_add_css(drupal_get_path('module', 'easy_admin') . '/assets/css/easy_admin.css');
 
   $tree = $variables['tree'];
+  $tree_user = $variables['tree_user'];
+
   $html = '<div class="easy-admin overlay-displace-top">';
   $html .= theme('easy_admin_tree', array('tree' => $tree));
+  $html .= theme('easy_admin_tree_user', array('tree_user' => $tree_user));
   $html .= '</div>';
   return $html;
 }
@@ -218,11 +194,24 @@ function theme_easy_admin_toolbar($variables) {
  * @ingroup themeable
  */
 function theme_easy_admin_tree($variables) {
+
   $menu_items = $variables['tree'];
 
-  $html = '<ul class="menu">';
+  $html = '<ul class="manager-menu">';
   foreach ($menu_items as $menu_item) {
     $html .= theme('easy_admin_item', array('menu_item' => $menu_item));
+  }
+  $html .= '</ul>';
+
+  return $html;
+}
+function theme_easy_admin_tree_user($variables) {
+
+  $menu_items_user = $variables['tree_user'];
+
+  $html = '<ul class="user">';
+  foreach ($menu_items_user as $menu_item_user) {
+    $html .= theme('easy_admin_item_user', array('menu_item_user' => $menu_item_user));
   }
   $html .= '</ul>';
 
@@ -243,7 +232,10 @@ function theme_easy_admin_tree($variables) {
  *
  * @ingroup themeable
  */
+
+
 function theme_easy_admin_item($variables) {
+
   $menu_item = $variables['menu_item'];
 
   $html = '<li class="' . implode(" ", $menu_item['classes']) . '">';
@@ -252,6 +244,21 @@ function theme_easy_admin_item($variables) {
     $html .= theme('easy_admin_tree', array('tree' => $menu_item['children']));
   }
   $html .= '</li>';
+
+  return $html;
+}
+
+function theme_easy_admin_item_user($variables) {
+
+  $menu_item_user = $variables['menu_item_user'];
+
+  $html = '<li class="' . implode(" ", $menu_item_user['classes']) . '">';
+  $html .= l($menu_item_user['title'], $menu_item_user['href'], $menu_item_user['localized_options']);
+  if (isset($menu_item_user['children'])) {
+    $html .= theme('easy_admin_tree_user', array('tree' => $menu_item_user['children']));
+  }
+  $html .= '</li>';
+
   return $html;
 }
 
@@ -274,6 +281,17 @@ function easy_admin_get_tree($menu_name) {
 
   $menu_items = easy_admin_create_datastructure_from_tree($tree);
   return $menu_items;
+}
+function easy_admin_get_tree_user($menu_name_user) {
+  $tree_user = menu_tree_all_data($menu_name_user);
+
+  // Allow i18n module to translate strings where available.
+  if (module_exists('i18n_menu')) {
+    $tree = i18n_menu_localize_tree($tree_user);
+  }
+
+  $menu_items_user = easy_admin_create_datastructure_from_tree_user($tree_user);
+  return $menu_items_user;
 }
 
 
@@ -303,6 +321,23 @@ function easy_admin_create_datastructure_from_tree($tree) {
   }
   return $new_menu_list;
 }
+function easy_admin_create_datastructure_from_tree_user($tree_user) {
+  $new_menu_list_user = array();
+  foreach ($tree_user as $element) {
+    // Skip disabled links.
+    if ($element['link']['hidden'] == 1) {
+      continue;
+    }
+
+    $new_menu_item_user = easy_admin_create_menu_item($element['link']['title'], $element['link']['href'], array(), $element['link']['localized_options']);
+    if (isset($element['below']) && count($element['below']) > 0) {
+      $new_menu_item_user['classes'][] = 'expanded';
+      $new_menu_item_user['children'] = easy_admin_create_datastructure_from_tree_user($element['below']);
+    }
+    $new_menu_list_user[] = $new_menu_item_user;
+  }
+  return $new_menu_list_user;
+}
 
 
 /**
@@ -323,13 +358,19 @@ function easy_admin_permission() {
 function easy_admin_theme() {
   return array(
     'easy_admin_toolbar' => array(
-      'variables' => array('tree' => array()),
+      'variables' => array('tree' => array(),'tree_user' => array()),
     ),
     'easy_admin_tree' => array(
       'variables' => array('tree' => array()),
     ),
     'easy_admin_item' => array(
       'variables' => array('menu_item' => array()),
+    ),
+    'easy_admin_tree_user' => array(
+      'variables' => array('tree_user' => array()),
+    ),
+    'easy_admin_item_user' => array(
+      'variables' => array('menu_item_user' => array()),
     ),
   );
 }
