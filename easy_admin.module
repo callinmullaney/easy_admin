@@ -82,23 +82,6 @@ function easy_admin_page_alter(&$page) {
     '#weight' => -50,
   );
 
-  $settings = array(
-    'has_admin_menu' => module_exists('admin_menu'),
-  );
-  $page['page_top']['easy_admin']['#attached']['js'][] = array (
-    'data' => array('easy_admin' => $settings),
-    'type' => 'setting',
-  );
-
-  if (variable_get('easy_admin_positioning', 'fixed') == 'fixed') {
-    drupal_add_js(drupal_get_path('module', 'easy_admin') . '/assets/js/easy_admin_fixed.js');
-  }
-  else {
-    if (module_exists('admin_menu') || module_exists('toolbar')) {
-      drupal_add_js(drupal_get_path('module', 'easy_admin') . '/assets/js/easy_admin_relative.js');
-    }
-  }
-
 }
 
 /**
@@ -152,13 +135,17 @@ function easy_admin_create_menu_item($title, $href, $classes = array(), $localiz
  */
 function easy_admin_output() {
 
-  $menu_name = variable_get('easy_admin_menu', '');
+
+
+  $menu_name = 'manager';
   $menu_name_user = 'user-menu';
 
   $tree = easy_admin_get_tree($menu_name);
   $tree_user = easy_admin_get_tree($menu_name_user);
 
   return theme('easy_admin_toolbar', array('tree' => $tree,'tree_user' => $tree_user));
+
+  krumo($variables);
 }
 
 /**
@@ -238,7 +225,7 @@ function theme_easy_admin_item($variables) {
 
   $menu_item = $variables['menu_item'];
 
-  $html = '<li class="' . implode(" ", $menu_item['classes']) . '">';
+  $html = '<li class="' . implode(" ", $menu_item['localized_options']['attributes']['class']) . '">';
   $html .= l($menu_item['title'], $menu_item['href'], $menu_item['localized_options']);
   if (isset($menu_item['children'])) {
     $html .= theme('easy_admin_tree', array('tree' => $menu_item['children']));

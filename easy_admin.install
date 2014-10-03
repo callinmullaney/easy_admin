@@ -24,15 +24,17 @@ function easy_admin_install() {
         'description' => 'Links for content managers that dont need access to all the developer/admin stuff.'
     );
 
+  // Add each menu item on install
   $item = array(
     'link_path' => '<front>',
     'link_title' => 'Home',
-    'menu_name' => 'manager', // Menu machine name, for example: main-menu
+    'menu_name' => 'manager', 
     'weight' => -10,
     'options' => array('attributes' => array('class' => array('home'))),
     'customized' => 1,
     'language' => NULL,
-    'plid' => 0, // Parent menu item, 0 if menu item is on top level
+    'mlid' => 900, 
+    'plid' => 0, 
     'module' => 'menu',
   );
   menu_link_save($item);
@@ -40,12 +42,13 @@ function easy_admin_install() {
   $item = array(
     'link_path' => '<nolink>',
     'link_title' => 'Add Content',
-    'menu_name' => 'manager', // Menu machine name, for example: main-menu
+    'menu_name' => 'manager', 
     'weight' => -8,
     'options' => array('attributes' => array('class' => array('add'))),
     'customized' => 1,
     'language' => NULL,
-    'plid' => 0, // Parent menu item, 0 if menu item is on top level
+    'mlid' => 901, 
+    'plid' => 0, 
     'module' => 'menu',
   );
   menu_link_save($item);
@@ -53,12 +56,13 @@ function easy_admin_install() {
   $item = array(
     'link_path' => '<nolink>',
     'link_title' => 'Manage Content',
-    'menu_name' => 'manager', // Menu machine name, for example: main-menu
+    'menu_name' => 'manager', 
     'weight' => -6,
     'options' => array('attributes' => array('class' => array('manage'))),
     'customized' => 1,
     'language' => NULL,
-    'plid' => 0, // Parent menu item, 0 if menu item is on top level
+    'mlid' => 902, 
+    'plid' => 0, 
     'module' => 'menu',
   );
   menu_link_save($item);
@@ -66,12 +70,13 @@ function easy_admin_install() {
   $item = array(
     'link_path' => 'admin/people',
     'link_title' => 'Manage Users',
-    'menu_name' => 'manager', // Menu machine name, for example: main-menu
+    'menu_name' => 'manager', 
     'weight' => -4,
     'options' => array('attributes' => array('class' => array('users'))),
     'customized' => 1,
     'language' => NULL,
-    'plid' => 0, // Parent menu item, 0 if menu item is on top level
+    'plid' => 0, 
+    'mlid' => 903, 
     'module' => 'menu',
   );
   menu_link_save($item);
@@ -79,12 +84,27 @@ function easy_admin_install() {
   $item = array(
     'link_path' => 'admin/structure/menu/manage/main-menu',
     'link_title' => 'Main Menu',
-    'menu_name' => 'main_menu', // Menu machine name, for example: main-menu
+    'menu_name' => 'manager', 
     'weight' => -2,
     'options' => array('attributes' => array('class' => array('main_menu'))),
     'customized' => 1,
     'language' => NULL,
-    'plid' => 0, // Parent menu item, 0 if menu item is on top level
+    'plid' => 0,
+    'mlid' => 904,  
+    'module' => 'menu',
+  );
+  menu_link_save($item);
+
+  $item = array(
+    'link_path' => 'admin/people/create',
+    'link_title' => 'Add User',
+    'menu_name' => 'manager', 
+    'weight' => 0,
+    'options' => array('attributes' => array('class' => array('add-users'))),
+    'customized' => 1,
+    'language' => NULL,
+    'plid' => 903, 
+    'mlid' => 905, 
     'module' => 'menu',
   );
   menu_link_save($item);
@@ -106,5 +126,4 @@ function easy_admin_uninstall() {
   variable_del('easy_admin_roles');
   variable_del('easy_admin_show_root');
   variable_del('easy_admin_menu');
-  variable_del('easy_admin_extra_menu');
 }
