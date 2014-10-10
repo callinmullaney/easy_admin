@@ -224,8 +224,13 @@ function theme_easy_admin_tree_user($variables) {
 function theme_easy_admin_item($variables) {
 
   $menu_item = $variables['menu_item'];
-
-  $html = '<li class="' . implode(" ", $menu_item['localized_options']['attributes']['class']) . '">';
+  
+  if (isset($menu_item['localized_options']['attributes']['class'][0])) {
+  	$menu_item_class = $menu_item['localized_options']['attributes']['class'][0];
+  	$html = '<li class="' . $menu_item_class . '">';
+  } else {
+  	$html = '<li class="placeholder">';
+  }
   $html .= l($menu_item['title'], $menu_item['href'], $menu_item['localized_options']);
   if (isset($menu_item['children'])) {
     $html .= theme('easy_admin_tree', array('tree' => $menu_item['children']));
