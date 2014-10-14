@@ -89,23 +89,25 @@ html body.easy-admin-fixed {
 }
 
 .easy-admin ul.manager-menu li ul.manager-menu li {
-  -moz-box-shadow: 0 4px 6px #000;
-  -webkit-box-shadow: 0 4px 6px #000;
-  box-shadow: 0 4px 6px #000;
+  -moz-box-shadow: 0 0 1px 4px rgba(0,0,0,.75);
+  -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.75);
+  box-shadow: 0 1px 4px rgba(0,0,0,.75);
   border-right: 1px solid #4e4e4e;
   border-left: 1px solid #4e4e4e;
 }
 .easy-admin ul.manager-menu li ul.manager-menu {
-  height: 10px;
-    position: absolute;
-    width: auto;
-    z-index: 7000;
-    width: 100%;
-    visibility: hidden;
+  max-height: 0;
+  overflow: hidden;
+  position: absolute;
+  width: auto;
+  z-index: 7000;
+  width: 100%;
+  opacity: 0;
 }
 .easy-admin ul.manager-menu li:hover ul.manager-menu {
-
-  visibility: visible;
+  opacity: 1;
+  max-height: 800px;
+  overflow: visible;
 }
 
 .easy-admin ul.manager-menu li ul li {
@@ -168,8 +170,8 @@ html body.easy-admin-fixed {
   padding: 0;
   position: relative;
 }
-.easy-admin ul.manager-menu li li:hover {
-  border-bottom: 1px solid #FE0000;
+.easy-admin ul.manager-menu li li:hover a {
+  box-shadow: inset 3px 0 0 #FE0000;
 }
 
 /* items - hover */
@@ -295,6 +297,7 @@ html body.easy-admin-fixed {
   font-size: 13px;
   font-weight: 200;
   letter-spacing: 0.05em;
+  font-family: helvetica neue, arial, sans-serif;
 }
 .easy-admin ul.user > li > span {
 
