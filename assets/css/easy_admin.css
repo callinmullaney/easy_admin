@@ -171,7 +171,7 @@ html body.easy-admin-fixed {
   position: relative;
 }
 .easy-admin ul.manager-menu li li:hover a {
-  box-shadow: inset 3px 0 0 #FE0000;
+  box-shadow: inset 3px 0 0 #ed3023;
 }
 
 /* items - hover */
@@ -185,7 +185,7 @@ html body.easy-admin-fixed {
 .easy-admin > ul.manager-menu > li:hover > span:before,
 .easy-admin > ul.user > li:hover > a:before,
 .easy-admin > ul.user > li:hover > span:before {
-  color: #FE0000;
+  color: #ed3023;
 }
 .easy-admin ul.manager-menu li:hover li a:hover {
   background-color: #222;
