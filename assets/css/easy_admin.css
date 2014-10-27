@@ -282,6 +282,7 @@ html body.easy-admin-fixed {
   display: inline-block;
   margin-right: 5px;
   font-size: 15px;
+  color: #aaa;
 }
 .easy-admin ul.user > li:first-child > a:before {
   content: "\f007";
