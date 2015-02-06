@@ -2,253 +2,307 @@
 
 /**
  * @file
- * Render an administrative menu of canvas.
+ * Display a dropdown menu at the top of the window.
  */
+
 
 /**
- * Implements hook_help().
+ * Implements hook_menu().
  */
-function easy_admin_help($path, $arg) {
-  switch ($path) {
-    case 'admin/config/administration/easy_admin':
-      return '<p>' . t('easy Admin is an off-canvas menu meant for content managers.') . '</p>';
+function easy_admin_menu() {
+  // Config page.
+  $items['admin/config/easy_admin'] = array(
+    'title' => 'easy admin configuration',
+    'description' => 'Configure easy admin',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('easy_admin_config_form'),
+    'access arguments' => array('administer easy admin'),
+    'file' => 'inc/easy_admin.config_page.inc',
+  );
 
-    case 'admin/help#easy_admin':
-      $output = '';
-      $output .= '<p>' . t('Easy Admin is intented to be a client facing administration menu to make managing a site and its content easier.') . '</p>';
-      return $output;
-  }
+  return $items;
+
 }
 
+/**
+ *  Determines if user has access to easy admin
+ */
+function easy_admin_enabled() {
+  global $user;
+
+  // Determine if the "easy_admin_show_root" setting grants access
+  if((int)$user->uid === 1 && (bool)variable_get('easy_admin_show_root', 1)) {
+    return TRUE;
+  }
+  
+  // Determine if the "easy_admin_show_roles" setting grants access
+  // This is done by intersecting the roles that are enabled in easy admin
+  // settings with the roles that the current user has (plus anonymous).
+  $enabled_roles = variable_get('easy_admin_roles', array());
+  $user_roles = array_keys($user->roles);
+
+  // Add anonymous (role id: 1)
+  array_push($user_roles, 1);
+  $matched_roles = array_intersect($enabled_roles, $user_roles);
+
+  return (!empty($matched_roles));
+
+}
+
+/**
+ * Implements hook_page_alter().
+ */
+function easy_admin_page_alter(&$page) {
+
+  // Do not show menu, if user hasn't access to it
+  if (!easy_admin_enabled()) {
+    return '';
+  }
+
+  // Do not display with core overlay, this creates duplicates menus, one in the
+  // main page and one in the overlay iframe
+  if (function_exists('overlay_get_mode')) {
+    if (overlay_get_mode() == 'child') {
+      return FALSE;
+    }
+  }
+
+  // Do not show menu on dialog page in the "media" module.
+  if ($page['#theme'] == 'media_dialog_page') {
+    return '';
+  }
+
+  // Do not show menu on dialog created by references dialog module (https://drupal.org/project/references_dialog)
+  if ($page['#theme'] == 'references_dialog_page') {
+    return '';
+  }  
+
+  $page['page_top']['easy_admin'] = array(
+    '#markup' => easy_admin_output(),
+    '#weight' => -50,
+  );
+
+}
+
+/**
+ * Implementation of hook_overlay_child_initialize();
+ *
+ * Push down the overlay to prevent easy admin covering the top of the overlay,
+ * also integrates with admin menu.
+ */
+function easy_admin_overlay_child_initialize() {
+  global $user;
+  $offset = 0;
+
+  $show_easy_admin = easy_admin_enabled();
+  if ($show_easy_admin) {
+    $offset += 28;
+  }
+  if (user_access('access administration menu')) {
+    $offset += 28;
+  }
+
+  if ($offset) {
+    drupal_add_css('body.overlay { padding-top: ' . $offset . 'px!important; }', array('type' => 'inline', 'group' => CSS_THEME+1));
+  }
+
+}
+
+/**
+ *  Helper to create a data structure representing a menu item in the dropdown.
+ *
+ * @param string $title
+ *   The title of the menu item.
+ * @param string $href
+ *   The link of the menu item.
+ * @param array $classes
+ *   CSS classes that will be put on the menu item (with default theming, these
+ *   are put on the <li> tag).
+ */
+function easy_admin_create_menu_item($title, $href, $classes = array(), $localized_options = array()) {
+  return array(
+    'title' => $title,
+    'href' => $href,
+    'classes' => $classes,
+    'localized_options' => $localized_options,
+    'children' => NULL,
+  );
+}
+
+/**
+ *  Create the easy admin.
+ *
+ */
+function easy_admin_output() {
+
+
+
+  $menu_name = 'manager';
+  $menu_name_user = 'user-menu';
+
+  $tree = easy_admin_get_tree($menu_name);
+  $tree_user = easy_admin_get_tree($menu_name_user);
+
+  return theme('easy_admin_toolbar', array('tree' => $tree,'tree_user' => $tree_user));
+
+  krumo($variables);
+}
+
+/**
+ * Render the toolbar.
+ *
+ * @param array $variables
+ *   - tree: A hierarical data structure suitable for
+ *           theme_easy_admin_tree().
+ *
+ * @ingroup themeable
+ */
+function theme_easy_admin_toolbar($variables) {
+  drupal_add_css(drupal_get_path('module', 'easy_admin') . '/assets/css/easy_admin.css');
+
+  $tree = $variables['tree'];
+  $tree_user = $variables['tree_user'];
+
+  $html = '<div class="easy-admin overlay-displace-top">';
+  $html .= theme('easy_admin_tree', array('tree' => $tree));
+  $html .= theme('easy_admin_tree_user', array('tree_user' => $tree_user));
+  $html .= '</div>';
+  return $html;
+}
+
+/**
+ * Render a menu tree.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - tree: An array of menu items. Each menu item is
+ *           suitable for being rendered by theme_easy_admin_subtree
+ *
+ * @ingroup themeable
+ */
+function theme_easy_admin_tree($variables) {
+
+  $menu_items = $variables['tree'];
+
+  $html = '<ul class="manager-menu">';
+  foreach ($menu_items as $menu_item) {
+    $html .= theme('easy_admin_item', array('menu_item' => $menu_item));
+  }
+  $html .= '</ul>';
+
+  return $html;
+}
+
+/**
+ * Render a menu item, including its children.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - menu_item: An associative array containing:
+ *       - title: The title of the menu link
+ *       - href: The link
+ *       - classes: An array of classes
+ *       - children: An array of menu items. Suitable for being rendered by
+ *                   theme_easy_admin_tree.
+ *
+ * @ingroup themeable
+ */
+
+
+function theme_easy_admin_item($variables) {
+
+  $menu_item = $variables['menu_item'];
+  
+  if (isset($menu_item['localized_options']['attributes']['class'][0])) {
+  	$menu_item_class = $menu_item['localized_options']['attributes']['class'][0];
+  	$html = '<li class="' . $menu_item_class . '">';
+  } else {
+  	$html = '<li class="placeholder">';
+  }
+  $html .= l($menu_item['title'], $menu_item['href'], $menu_item['localized_options']);
+  if (isset($menu_item['children'])) {
+    $html .= '<div class="subMenu">' . theme('easy_admin_tree', array('tree' => $menu_item['children'])) . '</div>';
+  }
+  $html .= '</li>';
+
+  return $html;
+}
+
+/**
+ * Get a tree.
+ *
+ * @param string $menu_name
+ *   The name of the menu.
+ *
+ * @return array
+ *   A data structure suitable for theme_easy_admin_tree().
+ */
+function easy_admin_get_tree($menu_name) {
+  $tree = menu_tree_all_data($menu_name);
+
+  // Allow i18n module to translate strings where available.
+  if (module_exists('i18n_menu')) {
+    $tree = i18n_menu_localize_tree($tree);
+  }
+
+  $menu_items = easy_admin_create_datastructure_from_tree($tree);
+  return $menu_items;
+}
+
+/**
+ * Build a datastructure suitable for theme_easy_admin_tree.
+ *
+ * @param array $tree
+ *   A tree structure like the returned by menu_tree_all_data.
+ *
+ * @return array
+ *   A data structure suitable for theme_easy_admin_tree().
+ */
+function easy_admin_create_datastructure_from_tree($tree) {
+  $new_menu_list = array();
+  foreach ($tree as $element) {
+    // Skip disabled links.
+    if ($element['link']['hidden'] == 1) {
+      continue;
+    }
+
+    $new_menu_item = easy_admin_create_menu_item($element['link']['title'], $element['link']['href'], array(), $element['link']['localized_options']);
+    if (isset($element['below']) && count($element['below']) > 0) {
+      $new_menu_item['classes'][] = 'expanded';
+      $new_menu_item['children'] = easy_admin_create_datastructure_from_tree($element['below']);
+    }
+
+    $new_menu_list[] = $new_menu_item;
+  }
+
+  return $new_menu_list;
+}
 
 /**
  * Implements hook_permission().
  */
 function easy_admin_permission() {
   return array(
-    'access easy_admin' => array(
-      'title' => t('easy Admin'),
-      'description' => t('Use this easy admin menu'),
+    'administer easy admin' => array(
+      'title' => t('Administer easy admin'),
+      'description' => t('Configure easy admin'),
     ),
   );
 }
-
 
 /**
  * Implements hook_theme().
  */
-function easy_admin_theme($existing, $type, $theme, $path) {
-  $items['easy_admin'] = array(
-    'render element' => 'easy_admin',
-    'template' => 'templates/easy_admin',
-    'path' => drupal_get_path('module', 'easy_admin'),
-  );
-  
-  return $items;
-  
-}
-
-
-/**
- * Implements hook_page_build().
- *
- * Add admin easy_admin to the page_top region automatically.
- */
-function easy_admin_page_build(&$page) {
-  $page['page_top']['easy_admin'] = array(
-    '#pre_render' => array('easy_admin_pre_render'),
-    '#access' => user_access('access easy_admin'),
-    '#weight' => 0, 
-  );
-  $page['page_bottom']['easy_admin'] = array(
-    '#weight' => 25, 
-    '#markup' => '<script>new gnMenu( document.getElementById( \'easy-admin\' ) );</script>',
-  );
-}
-
-
-/**
- * Prerender function for the easy_admin.
- *
- * Since building the easy_admin takes some time, it is done just prior to
- * rendering to ensure that it is built only if it will be displayed.
- */
-function easy_admin_pre_render($easy_admin) {
-  $easy_admin = array_merge($easy_admin, easy_admin_view());
-  return $easy_admin;
-}
-
-/**
- * Implements hook_preprocess_html().
- *
- * Add some page classes, so global page theming can adjust to the easy_admin.
- */
-function easy_admin_preprocess_html(&$vars) {
-  if (isset($vars['page']['page_top']['easy_admin']) && user_access('access easy_admin')) {
-    $vars['classes_array'][] = 'easy_admin';
-  }
-}
-
-
-/**
- * Implements hook_system_info_alter().
- *
- * Indicate that the 'page_bottom' region (in which the easy_admin will be displayed)
- * is an overlay supplemental region that should be refreshed whenever its
- * content is updated.
- *
- * This information is provided for any module that might need to use it, not
- * just the core Overlay module.
- */
-function easy_admin_system_info_alter(&$info, $file, $type) {
-  if ($type == 'theme') {
-    $info['overlay_supplemental_regions'][] = 'page_top';
-  }
-}
-
-/**
- * Builds the admin menu as a structured array ready for drupal_render().
- *
- * @return
- *   Array of links and settings relating to the admin menu.
- */
-function easy_admin_view() {
-  global $user;
-
-  $module_path = drupal_get_path('module', 'easy_admin');
-  $build = array(
-    '#theme' => 'easy_admin',
-    '#attached'=> array(
-      'js' => array(
-        $module_path . '/js/gnmenu.js',
-      ),
-      'css' => array(
-        $module_path . '/css/style.css',
-      ),
+function easy_admin_theme() {
+  return array(
+    'easy_admin_toolbar' => array(
+      'variables' => array('tree' => array(),'tree_user' => array()),
+    ),
+    'easy_admin_tree' => array(
+      'variables' => array('tree' => array()),
+    ),
+    'easy_admin_item' => array(
+      'variables' => array('menu_item' => array()),
     ),
   );
-
-  // Retrieve the admin menu from the database.
-  $links = easy_admin_menu_navigation_links(easy_admin_get_menu_tree());
-  $build['easy_admin_menu'] = array(
-    '#theme' => 'links__easy_admin_menu',
-    '#links' => $links,
-    '#attributes' => array('id' => 'easy_admin-menu'),
-    '#heading' => array('text' => t('Administrative easy_admin'), 'level' => 'h2', 'class' => 'element-invisible'),
-  );
-
-  // Add logout & user account links or login link.
-  if ($user->uid) {
-    $links = array(
-      'account' => array(
-        'title' => t('Hello <strong>@username</strong>', array('@username' => format_username($user))),
-        'href' => 'user',
-        'html' => TRUE,
-        'attributes' => array('title' => t('User account')),
-      ),
-      'logout' => array(
-        'title' => t('Log out'),
-        'href' => 'user/logout',
-      ),
-    );
-  }
-  else {
-     $links = array(
-      'login' => array(
-        'title' => t('Log in'),
-        'href' => 'user',
-      ),
-    );
-  }
-  $build['easy_admin_user'] = array(
-    '#theme' => 'links__easy_admin_user',
-    '#links' => $links,
-    '#attributes' => array('id' => 'easy_admin-user'),
-  );
-
-  // Add a "home" link.
-  $link = array(
-    'home' => array(
-      'title' => '<span class="home-link">Home</span>',
-      'href' => '<front>',
-      'html' => TRUE,
-      'attributes' => array('title' => t('Home')),
-    ),
-  );
-  $build['easy_admin_home'] = array(
-    '#theme' => 'links',
-    '#links' => $link,
-    '#attributes' => array('id' => 'easy_admin-home'),
-  );
-
-
-  // Prepare the drawer links CSS classes.
-  $easy_admin_drawer_classes = array(
-    'easy_admin-drawer',
-    'clearfix',
-  );
-  $build['easy_admin_drawer_classes'] = implode(' ', $easy_admin_drawer_classes);
-
-  return $build;
-}
-
-
-/**
- * Gets only the top level items below the 'admin' path.
- *
- * @return
- *   An array containing a menu tree of top level items below the 'admin' path.
- */
-function easy_admin_get_menu_tree() {
-  $tree = array();
-  $admin_link = db_query('SELECT * FROM {menu_links} WHERE menu_name = :menu_name AND module = :module AND link_path = :path', array(':menu_name' => 'manager_menu', ':module' => 'system', ':path' => 'admin'))->fetchAssoc();
-  if ($admin_link) {
-    $tree = menu_build_tree('manager_menu', array(
-      'expanded' => array($admin_link['mlid']),
-      'min_depth' => $admin_link['depth'] + 1,
-      'max_depth' => $admin_link['depth'] + 1,
-    ));
-  }
-
-  return $tree;
-}
-
-
-/**
- * Generates a links array from a menu tree array.
- *
- * Based on menu_navigation_links(). Adds path based IDs and icon placeholders
- * to the links.
- *
- * @return
- *   An array of links as defined above.
- */
-function easy_admin_menu_navigation_links($tree) {
-  $links = array();
-  foreach ($tree as $item) {
-    if (!$item['link']['hidden'] && $item['link']['access']) {
-      // Make sure we have a path specific ID in place, so we can attach icons
-      // and behaviors to the items.
-      $id = str_replace(array('/', '<', '>'), array('-', '', ''), $item['link']['href']);
-
-      $link = $item['link']['localized_options'];
-      $link['href'] = $item['link']['href'];
-      // Add icon placeholder.
-      $link['title'] = '<span class="icon"></span>' . check_plain($item['link']['title']);
-      // Add admin link ID.
-      $link['attributes'] = array('id' => 'easy_admin-link-' . $id);
-      if (!empty($item['link']['description'])) {
-        $link['title'] .= ' <span class="element-invisible">(' . $item['link']['description'] . ')</span>';
-        $link['attributes']['title'] = $item['link']['description'];
-      }
-      $link['html'] = TRUE;
-
-      $class = ' path-' . $id;
-      if (easy_admin_in_active_trail($item['link']['href'])) {
-        $class .= ' active-trail';
-      }
-      $links['menu-' . $item['link']['mlid'] . $class] = $link;
-    }
-  }
-  return $links;
 }
