@@ -49,6 +49,12 @@ function easy_admin_enabled() {
 
 }
 
+function easy_admin_preprocess_html(&$vars) {
+  if (easy_admin_enabled()) {
+    $vars['classes_array'][] = 'easy-admin-menu';
+  }
+}
+
 /**
  * Implements hook_page_alter().
  */
@@ -97,6 +103,7 @@ function easy_admin_overlay_child_initialize() {
   $show_easy_admin = easy_admin_enabled();
   if ($show_easy_admin) {
     $offset += 28;
+    $vars['classes_array'][] = 'easy-admin';
   }
   if (user_access('access administration menu')) {
     $offset += 28;
@@ -158,15 +165,16 @@ function easy_admin_output() {
  * @ingroup themeable
  */
 function theme_easy_admin_toolbar($variables) {
+  drupal_add_js(drupal_get_path('module', 'easy_admin') . '/assets/js/easy_admin.js');
   drupal_add_css(drupal_get_path('module', 'easy_admin') . '/assets/css/easy_admin.css');
 
   $tree = $variables['tree'];
   $tree_user = $variables['tree_user'];
 
-  $html = '<div class="easy-admin overlay-displace-top">';
+  $html = '<div class="easy-admin"><div class="firstLevel">';
   $html .= theme('easy_admin_tree', array('tree' => $tree));
   $html .= theme('easy_admin_tree_user', array('tree_user' => $tree_user));
-  $html .= '</div>';
+  $html .= '</div></div>';
   return $html;
 }
 
@@ -215,9 +223,9 @@ function theme_easy_admin_item($variables) {
   
   if (isset($menu_item['localized_options']['attributes']['class'][0])) {
   	$menu_item_class = $menu_item['localized_options']['attributes']['class'][0];
-  	$html = '<li class="' . $menu_item_class . '">';
+  	$html = '<li class="' . $menu_item_class . '"><i></i>';
   } else {
-  	$html = '<li class="placeholder">';
+  	$html = '<li class="placeholder"><i></i>';
   }
   $html .= l($menu_item['title'], $menu_item['href'], $menu_item['localized_options']);
   if (isset($menu_item['children'])) {

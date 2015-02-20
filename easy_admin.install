@@ -109,6 +109,20 @@ function easy_admin_install() {
   );
   menu_link_save($item);
 
+  $item = array(
+    'link_path' => 'user/logout',
+    'link_title' => 'logout',
+    'menu_name' => 'manager', 
+    'weight' => 0,
+    'options' => array('attributes' => array('class' => array('logout'))),
+    'customized' => 1,
+    'language' => NULL,
+    'plid' => 0, 
+    'mlid' => 906, 
+    'module' => 'menu',
+  );
+  menu_link_save($item);
+
   menu_save($menu);
   cache_clear_all('*', 'cache_menu', TRUE);
 
