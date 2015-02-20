@@ -5,6 +5,5 @@ package = Administration
 configure = admin/config/easy_admin
 dependencies[] = special_menu_items
 
-version = "7.x-1.2"
+version = "7.x-2.0-dev"
 project = "easy_admin"
-
