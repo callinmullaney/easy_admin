@@ -10,12 +10,6 @@
     }, 1000);
   }
 
-  Drupal.behaviors.play = {
-    attach: function(context, settings) {
-
-    }
-  };
-
   $(document).ready(function() {
     $('.manager-menu > li > a,.manager-menu > li > span,ul.user > li > a').wrapInner('<span />');
 
@@ -31,8 +25,6 @@
     });
 
     var myTimer;
-
-
 
     // mouse enter
     $('.easy-admin').mouseenter(function() {
