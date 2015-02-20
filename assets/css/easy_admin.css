@@ -45,6 +45,16 @@ body.easy-admin-menu {
 }
 
 .easy-admin .manager-menu ul {
+}
+.page {
+  margin-left: 100px;
+}
+
+.manager-menu li {
+  display: block;
+}
+
+.manager-menu ul {
   position: absolute;
   z-index: 100;
   height: 100vh;
@@ -64,8 +74,6 @@ body.easy-admin-menu {
 .easy-admin.secondLevel .firstLevel {
   left: -260px;
 }
-
-
 
 .easy-admin .manager-menu > li span:not(.nolink) {
   display: inline-block;
@@ -99,6 +107,7 @@ body.easy-admin-menu {
     color: #aaa;
     content: "\f0fe";
 }
+
 .easy-admin ul.manager-menu li.home i:before {
     content: "\f015";
 }
