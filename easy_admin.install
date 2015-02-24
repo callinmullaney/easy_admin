@@ -83,7 +83,7 @@ function easy_admin_install() {
 
   $item = array(
     'link_path' => 'admin/structure/menu/manage/main-menu',
-    'link_title' => 'Main Menu',
+    'link_title' => 'Manage Menu',
     'menu_name' => 'manager', 
     'weight' => -2,
     'options' => array('attributes' => array('class' => array('main_menu'))),

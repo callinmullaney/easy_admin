@@ -223,9 +223,9 @@ function theme_easy_admin_item($variables) {
   
   if (isset($menu_item['localized_options']['attributes']['class'][0])) {
   	$menu_item_class = $menu_item['localized_options']['attributes']['class'][0];
-  	$html = '<li class="' . $menu_item_class . '"><i></i>';
+  	$html = '<li class="' . $menu_item_class . '">';
   } else {
-  	$html = '<li class="placeholder"><i></i>';
+  	$html = '<li class="placeholder">';
   }
   $html .= l($menu_item['title'], $menu_item['href'], $menu_item['localized_options']);
   if (isset($menu_item['children'])) {

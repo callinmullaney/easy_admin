@@ -1,10 +1,10 @@
 (function ($, Drupal) {
 
-  function myFunction () {
+  function clearTimer () {
     clearTimeout(myTimer);
   }
 
-  function myStopFunction() {
+  function resetMenu() {
     myTimer = setTimeout(function () {
       $('.easy-admin').removeClass('secondLevel');
     }, 1000);
@@ -18,22 +18,28 @@
       if ($(this).parent().find('ul').length) {
         e.preventDefault();
         $('.easy-admin').addClass('secondLevel');
-      } else {
-        e.preventDefault();
-        alert('no subnav');
       }
     });
 
-    var myTimer;
+    // add back button - needs to be added to module
+    $('.manager-menu .manager-menu').prepend('<button class="back"><i class="fa fa-long-arrow-left"></i>Back</button>');
+
+    // back button functionality
+    $('.easy-admin button.back').click(function() {
+      $('.easy-admin').removeClass('secondLevel');
+    });
+
+    // add icon to links - needs to be added to module
+    $('.easy-admin .manager-menu > li > a,.easy-admin .manager-menu > li > span.nolink').prepend('<i />');
 
     // mouse enter
     $('.easy-admin').mouseenter(function() {
-      myFunction();
+      clearTimer();
     });
 
     // mouse out
     $('.easy-admin').mouseleave(function() {
-      myStopFunction();
+      resetMenu();
     });
   });
 
