@@ -148,9 +148,8 @@ function easy_admin_output() {
   $menu_name_user = 'user-menu';
 
   $tree = easy_admin_get_tree($menu_name);
-  $tree_user = easy_admin_get_tree($menu_name_user);
 
-  return theme('easy_admin_toolbar', array('tree' => $tree,'tree_user' => $tree_user));
+  return theme('easy_admin_toolbar', array('tree' => $tree));
 
   krumo($variables);
 }
@@ -169,11 +168,9 @@ function theme_easy_admin_toolbar($variables) {
   drupal_add_css(drupal_get_path('module', 'easy_admin') . '/assets/css/easy_admin.css');
 
   $tree = $variables['tree'];
-  $tree_user = $variables['tree_user'];
 
   $html = '<div class="easy-admin"><div class="firstLevel">';
   $html .= theme('easy_admin_tree', array('tree' => $tree));
-  $html .= theme('easy_admin_tree_user', array('tree_user' => $tree_user));
   $html .= '</div></div>';
   return $html;
 }
@@ -304,7 +301,7 @@ function easy_admin_permission() {
 function easy_admin_theme() {
   return array(
     'easy_admin_toolbar' => array(
-      'variables' => array('tree' => array(),'tree_user' => array()),
+      'variables' => array('tree' => array()),
     ),
     'easy_admin_tree' => array(
       'variables' => array('tree' => array()),
