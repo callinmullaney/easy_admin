@@ -24,7 +24,7 @@ function easy_admin_install() {
         'description' => 'Links for content managers that dont need access to all the developer/admin stuff.'
     );
 
-  // Add each menu item on install
+  // Add each menu item on install - Parent Items
   $item = array(
     'link_path' => '<front>',
     'link_title' => 'Home',
@@ -33,8 +33,6 @@ function easy_admin_install() {
     'options' => array('attributes' => array('class' => array('home'))),
     'customized' => 1,
     'language' => NULL,
-    'mlid' => 900, 
-    'plid' => 0, 
     'module' => 'menu',
   );
   menu_link_save($item);
@@ -47,8 +45,6 @@ function easy_admin_install() {
     'options' => array('attributes' => array('class' => array('add'))),
     'customized' => 1,
     'language' => NULL,
-    'mlid' => 901, 
-    'plid' => 0, 
     'module' => 'menu',
   );
   menu_link_save($item);
@@ -61,25 +57,21 @@ function easy_admin_install() {
     'options' => array('attributes' => array('class' => array('manage'))),
     'customized' => 1,
     'language' => NULL,
-    'mlid' => 902, 
-    'plid' => 0, 
     'module' => 'menu',
   );
   menu_link_save($item);
 
   $item = array(
-    'link_path' => 'admin/people',
-    'link_title' => 'Manage Users',
+    'link_path' => '<nolink>',
+    'link_title' => 'People',
     'menu_name' => 'manager', 
     'weight' => -4,
     'options' => array('attributes' => array('class' => array('users'))),
     'customized' => 1,
     'language' => NULL,
-    'plid' => 0, 
-    'mlid' => 903, 
     'module' => 'menu',
   );
-  menu_link_save($item);
+  $people_id = menu_link_save($item);
 
   $item = array(
     'link_path' => 'admin/structure/menu/manage/main-menu',
@@ -89,22 +81,6 @@ function easy_admin_install() {
     'options' => array('attributes' => array('class' => array('main_menu'))),
     'customized' => 1,
     'language' => NULL,
-    'plid' => 0,
-    'mlid' => 904,  
-    'module' => 'menu',
-  );
-  menu_link_save($item);
-
-  $item = array(
-    'link_path' => 'admin/people/create',
-    'link_title' => 'Add User',
-    'menu_name' => 'manager', 
-    'weight' => 0,
-    'options' => array('attributes' => array('class' => array('add-users'))),
-    'customized' => 1,
-    'language' => NULL,
-    'plid' => 903, 
-    'mlid' => 905, 
     'module' => 'menu',
   );
   menu_link_save($item);
@@ -117,8 +93,33 @@ function easy_admin_install() {
     'options' => array('attributes' => array('class' => array('logout'))),
     'customized' => 1,
     'language' => NULL,
-    'plid' => 0, 
-    'mlid' => 906, 
+    'module' => 'menu',
+  );
+  menu_link_save($item);
+
+  // Default child elements 
+  $item = array(
+    'link_path' => 'admin/people/create',
+    'link_title' => 'Add People',
+    'menu_name' => 'manager', 
+    'weight' => 0,
+    'options' => array('attributes' => array('class' => array('add-users'))),
+    'customized' => 1,
+    'language' => NULL,
+    'plid' => $people_id, 
+    'module' => 'menu',
+  );
+  menu_link_save($item);
+
+  $item = array(
+    'link_path' => 'admin/people',
+    'link_title' => 'Manage People',
+    'menu_name' => 'manager', 
+    'weight' => -4,
+    'options' => array('attributes' => array('class' => array('users'))),
+    'customized' => 1,
+    'language' => NULL,
+    'plid' => $people_id, 
     'module' => 'menu',
   );
   menu_link_save($item);
