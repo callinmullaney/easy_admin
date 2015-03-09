@@ -82,7 +82,7 @@ function easy_admin_enable() {
         'title_field' => 1,
         'max_resolution' => '1000x1000',
         'min_resolution' => '200x200',
-        'default_image' => $file,
+        //'default_image' => $file,
         'user_register_form' => 1,
       ),
     );
@@ -256,20 +256,38 @@ function theme_easy_admin_tree($variables) {
 
   global $user;
   $user = user_load($user->uid);
-
-  $info = field_info_instance('user', 'field_profile_picture', 'user');
-  
-  if ( !empty( $info ) && isset($info['settings']['default_image']) ) {
-    $default_fid = $info['settings']['default_image'];
-    // $default_img_object = file_load($default_fid);
-  }
-  $img_url = $default_fid->uri;  
-  $style = 'thumbnail';
-
+  $style = 'medium';
   $menu_items = $variables['tree'];
 
+  $info = field_info_instance('user', 'field_profile_picture', 'user');
+  $default_img = $info['settings']['default_image'];
+  
+  // if this field exists create a variable that points to the file uri
+  if(!empty($user->field_profile_picture)) {
+    $profile_pic = $user->field_profile_picture['und']['0'];
+    $profile_pic_uri = $profile_pic['uri'];
+  }
+
+  // if a custom img is set assign that to a varaible or
+  // assign the default image to the variable.
+  if (!empty($info) && !empty($profile_pic_uri)) {
+    $img_url = $profile_pic_uri; 
+    // krumo($img_url);
+    // echo "profile set";
+  }elseif (!empty($info) && !empty($profile_pic_uri)) {
+    $default_fid = $info['settings']['default_image'];
+    $img_url = $default_fid->uri;  
+    // krumo($img_url);
+    // echo "default img set";
+    // $default_img_object = file_load($default_fid);
+  }else {
+    $img_url = NULL;
+  }
+
   $html = '<ul class="current-user"><li>';
-  $html .= image_style_url($style, $img_url);
+  if ($img_url != NULL) {
+    $html .= '<img src="' . image_style_url($style, $img_url) . ' alt="profile" />';
+  }
   $html .= $user->name;
   $html .= '</li></ul>';
 
@@ -303,10 +321,10 @@ function theme_easy_admin_item($variables) {
   $menu_item = $variables['menu_item'];
   
   if (isset($menu_item['localized_options']['attributes']['class'][0])) {
-  	$menu_item_class = $menu_item['localized_options']['attributes']['class'][0];
-  	$html = '<li class="' . $menu_item_class . '">';
+    $menu_item_class = $menu_item['localized_options']['attributes']['class'][0];
+    $html = '<li class="' . $menu_item_class . '">';
   } else {
-  	$html = '<li class="placeholder">';
+    $html = '<li class="placeholder">';
   }
   $html .= l($menu_item['title'], $menu_item['href'], $menu_item['localized_options']);
   if (isset($menu_item['children'])) {
