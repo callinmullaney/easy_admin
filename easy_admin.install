@@ -85,18 +85,6 @@ function easy_admin_install() {
   );
   menu_link_save($item);
 
-  $item = array(
-    'link_path' => 'user/logout',
-    'link_title' => 'logout',
-    'menu_name' => 'manager', 
-    'weight' => 0,
-    'options' => array('attributes' => array('class' => array('logout'))),
-    'customized' => 1,
-    'language' => NULL,
-    'module' => 'menu',
-  );
-  menu_link_save($item);
-
   // Default child elements 
   $item = array(
     'link_path' => 'admin/people/create',

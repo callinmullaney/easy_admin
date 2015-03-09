@@ -284,6 +284,7 @@ function theme_easy_admin_tree($variables) {
     $img_url = NULL;
   }
 
+  // Build the user unordered list
   $html = '<ul class="current-user"><li>';
   if ($img_url != NULL) {
     $html .= '<img src="' . image_style_url($style, $img_url) . ' alt="profile" />';
@@ -291,12 +292,19 @@ function theme_easy_admin_tree($variables) {
   $html .= $user->name;
   $html .= '</li></ul>';
 
+  // Build the admin menu unordered list from 'manager-menu'
   $html .= '<ul class="manager-menu">';
   foreach ($menu_items as $menu_item) {
     $html .= theme('easy_admin_item', array('menu_item' => $menu_item));
   }
   $html .= '</ul>';
 
+  // Build the logout unordered list
+  $html .= '<ul class="user">';
+  $html .= '<li><a href="/user/logout" title="User Logout"><i></i><span>Logout</span></a></li>';
+  $html .= '</ul>';
+
+  // Return all of it
   return $html;
 }
 
@@ -321,10 +329,10 @@ function theme_easy_admin_item($variables) {
   $menu_item = $variables['menu_item'];
   
   if (isset($menu_item['localized_options']['attributes']['class'][0])) {
-    $menu_item_class = $menu_item['localized_options']['attributes']['class'][0];
-    $html = '<li class="' . $menu_item_class . '">';
+  	$menu_item_class = $menu_item['localized_options']['attributes']['class'][0];
+  	$html = '<li class="' . $menu_item_class . '">';
   } else {
-    $html = '<li class="placeholder">';
+  	$html = '<li class="placeholder">';
   }
   $html .= l($menu_item['title'], $menu_item['href'], $menu_item['localized_options']);
   if (isset($menu_item['children'])) {
