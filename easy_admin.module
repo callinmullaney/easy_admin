@@ -44,6 +44,9 @@ function easy_admin_enable() {
 
     //
     $file_uri = file_build_uri($directory . '/profile.jpg');
+    krumo($file_uri);
+    echo filesize($file_uri);
+
     $file_mime = file_get_mimetype($file_uri);
 
     $file = new stdClass;
@@ -251,9 +254,26 @@ function theme_easy_admin_toolbar($variables) {
  */
 function theme_easy_admin_tree($variables) {
 
+  global $user;
+  $user = user_load($user->uid);
+
+  $info = field_info_instance('user', 'field_profile_picture', 'user');
+  
+  if ( !empty( $info ) && isset($info['settings']['default_image']) ) {
+    $default_fid = $info['settings']['default_image'];
+    // $default_img_object = file_load($default_fid);
+  }
+  $img_url = $default_fid->uri;  
+  $style = 'thumbnail';
+
   $menu_items = $variables['tree'];
 
-  $html = '<ul class="manager-menu">';
+  $html = '<ul class="current-user"><li>';
+  $html .= image_style_url($style, $img_url);
+  $html .= $user->name;
+  $html .= '</li></ul>';
+
+  $html .= '<ul class="manager-menu">';
   foreach ($menu_items as $menu_item) {
     $html .= theme('easy_admin_item', array('menu_item' => $menu_item));
   }

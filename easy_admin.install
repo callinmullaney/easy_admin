@@ -141,4 +141,5 @@ function easy_admin_uninstall() {
   variable_del('easy_admin_roles');
   variable_del('easy_admin_show_root');
   variable_del('easy_admin_menu');
+  image_style_delete(image_style_load('square_profile'));
 }
