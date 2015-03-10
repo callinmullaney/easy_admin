@@ -1,17 +1,16 @@
 (function ($, Drupal) {
 
-  function clearTimer () {
-    clearTimeout(myTimer);
-  }
-
   function resetMenu() {
     myTimer = setTimeout(function () {
       $('.easy-admin').removeClass('secondLevel');
     }, 1000);
   }
+  function clearTimer () {
+    clearTimeout(myTimer);
+  }
 
   $(document).ready(function() {
-    $('.manager-menu > li > a,.manager-menu > li > span,ul.user > li > a').wrapInner('<span />');
+    $('.manager-menu > li > a,.manager-menu > li > span').wrapInner('<span />');
 
     // sub nav functionality
     $('.manager-menu a,.manager-menu span.nolink').click(function(e) {

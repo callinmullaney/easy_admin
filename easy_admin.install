@@ -115,6 +115,26 @@ function easy_admin_install() {
   menu_save($menu);
   cache_clear_all('*', 'cache_menu', TRUE);
 
+
+  // Create an image style for the users pic
+  $style = image_style_save(array(
+    'name' => 'square_profile_pic',
+    'label' => 'Square - Profile Pic')
+  );
+  $effect = array(
+    'name' => 'image_scale_and_crop',
+    'data' => array(
+      'width' => 150,
+      'height' => 150,
+      'upscale' => TRUE,
+    ),
+    'isid' => $style['isid'],
+  );
+  image_effect_save($effect);
+
+  image_style_flush($style);
+
+
   // Tell user that the module was installed and how to configure it.
   $t = get_t();
   $link = l($t('Administration > Configuration > Easy admin'), 'admin/config/easy_admin');
@@ -129,5 +149,4 @@ function easy_admin_uninstall() {
   variable_del('easy_admin_roles');
   variable_del('easy_admin_show_root');
   variable_del('easy_admin_menu');
-  image_style_delete(image_style_load('square_profile'));
 }

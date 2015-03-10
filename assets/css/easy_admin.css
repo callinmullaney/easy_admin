@@ -38,18 +38,25 @@ body.easy-admin-menu {
 }
 
 .easy-admin:hover .manager-menu li a,
-.easy-admin:hover .manager-menu li span.nolink {
+.easy-admin:hover .manager-menu li span.nolink,
+.easy-admin:hover ul.user li a {
 
 }
-.easy-admin .manager-menu {
+.easy-admin ul.manager-menu,
+.easy-admin ul.user {
   margin: 0;
+}
+.easy-admin ul.user {
+  position: fixed;
+  bottom: 2%;
 }
 
 .easy-admin .manager-menu li {
   display: block;
 }
 .easy-admin .manager-menu li a,
-.easy-admin .manager-menu li span.nolink {
+.easy-admin .manager-menu li span.nolink,
+.easy-admin ul.user li a {
   display: block;
   width: 100%;
   padding: 0 30px;
@@ -63,9 +70,13 @@ body.easy-admin-menu {
   letter-spacing: .06em;
   border-left: 2px solid transparent;
 }
+.easy-admin ul.user li a {
+  
+}
 
 .easy-admin .manager-menu li a:hover,
-.easy-admin .manager-menu li span.nolink:hover {
+.easy-admin .manager-menu li span.nolink:hover,
+.easy-admin ul.user li a:hover {
   background: #000;
   border-color: #0074BD;
 }
@@ -73,7 +84,8 @@ body.easy-admin-menu {
 .easy-admin ul.manager-menu ul {
 }
 
-.easy-admin ul.manager-menu li {
+.easy-admin ul.manager-menu li,
+.easy-admin ul.user li {
   display: block;
 }
 
@@ -98,7 +110,8 @@ body.easy-admin-menu {
   left: -260px;
 }
 
-.easy-admin .manager-menu > li span:not(.nolink) {
+.easy-admin .manager-menu > li span:not(.nolink),
+.easy-admin .user > li span:not(.nolink) {
   display: inline-block;
   opacity: 0;
   max-width: 0;
@@ -110,7 +123,8 @@ body.easy-admin-menu {
   cursor: pointer;
 }
 
-.easy-admin:hover .manager-menu > li span:not(nolink) {
+.easy-admin:hover .manager-menu > li span:not(nolink),
+.easy-admin:hover .user > li span:not(nolink) {
   opacity: 1;
   max-width: 260px;
 }
@@ -164,7 +178,8 @@ button.back:focus {
 
 
 
-.easy-admin ul.manager-menu li i {
+.easy-admin ul.manager-menu li i,
+.easy-admin ul.user li i {
   display: inline-block;
   vertical-align: middle;
   margin-right: 15px;
@@ -193,40 +208,12 @@ button.back:focus {
   height: 17px;
   background-image: url('../img/menu-icon.png');
 }
-.easy-admin ul.manager-menu li.logout i {
+
+.easy-admin ul.user li i {
   height: 23px;
   background-image: url('../img/logout-icon.png');
 }
 
 .easy-admin ul.manager-menu li ul li i:before {
   display: none !important;
-}
-
-.easy-admin ul.user > li i:before {
-  font-family: FontAwesome;
-  font-style: normal;
-  font-weight: normal;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  display: inline-block;
-  margin-right: 5px;
-  font-size: 15px;
-  color: #aaa;
-}
-.easy-admin ul.user > li:first-child i:before {
-  content: "\f007";
-}
-.easy-admin ul.user > li:last-child i:before {
-  content: "\f011";
-}
-.easy-admin ul.user > li > span,
-.easy-admin ul.user > li > a {
-  display: block;
-  padding: 0 10px;
-  color: #e1e1e1;
-  font-size: 13px;
-  font-weight: 200;
-  letter-spacing: 0.05em;
-  font-family: 'Droid Sans', helvetica neue, arial, sans-serif;
 }
