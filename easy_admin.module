@@ -28,6 +28,25 @@ function easy_admin_menu() {
  *  Create a user field as soon as this module is turned on
  */
 function easy_admin_enable() {
+
+  // Create an image style for the users pic
+  // $style = image_style_save(array(
+  //   'name' => 'square_profile_pic',
+  //   'label' => 'Square - Profile Pic')
+  // );
+  // $effect = array(
+  //   'name' => 'image_scale_and_crop',
+  //   'data' => array(
+  //     'width' => 150,
+  //     'height' => 150,
+  //     'upscale' => TRUE,
+  //   ),
+  //   'isid' => $style['isid'],
+  // );
+  // image_effect_save($effect);
+
+  // image_style_flush($style);
+
   // Create a profile picture field so we can place it at the top
   // of the admin menu
   // Check if our field is not already created.
