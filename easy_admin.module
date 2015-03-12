@@ -29,6 +29,110 @@ function easy_admin_menu() {
  */
 function easy_admin_enable() {
 
+  // Increase the module weight, so easy_admin catches any alterations made by
+  // other modules in hook_menu_alter().
+  db_update('system')
+    ->fields(array('weight' => 100))
+    ->condition('type', 'module')
+    ->condition('name', 'easy_admin')
+    ->execute();
+
+  // Create the client admin menu
+  $menu = array(
+        'menu_name' => 'manager',
+        'title' => 'Manager Menu',
+        'description' => 'Links for content managers that dont need access to all the developer/admin stuff.'
+    );
+  menu_save($menu);
+  
+  // Add menu items to the new manager menu - Parent Items
+  $item = array(
+    'link_path' => '<front>',
+    'link_title' => 'Home',
+    'menu_name' => 'manager', 
+    'weight' => -10,
+    'options' => array('attributes' => array('class' => array('home'))),
+    'customized' => 1,
+    'language' => NULL,
+    'module' => 'menu',
+  );
+  menu_link_save($item);
+
+  $item = array(
+    'link_path' => '<nolink>',
+    'link_title' => 'Add Content',
+    'menu_name' => 'manager', 
+    'weight' => -8,
+    'options' => array('attributes' => array('class' => array('add'))),
+    'customized' => 1,
+    'language' => NULL,
+    'module' => 'menu',
+  );
+  menu_link_save($item);
+
+  $item = array(
+    'link_path' => '<nolink>',
+    'link_title' => 'Manage Content',
+    'menu_name' => 'manager', 
+    'weight' => -6,
+    'options' => array('attributes' => array('class' => array('manage'))),
+    'customized' => 1,
+    'language' => NULL,
+    'module' => 'menu',
+  );
+  menu_link_save($item);
+
+  $item = array(
+    'link_path' => '<nolink>',
+    'link_title' => 'People',
+    'menu_name' => 'manager', 
+    'weight' => -4,
+    'options' => array('attributes' => array('class' => array('users'))),
+    'customized' => 1,
+    'language' => NULL,
+    'module' => 'menu',
+  );
+  $people_id = menu_link_save($item);
+
+  $item = array(
+    'link_path' => 'admin/structure/menu/manage/main-menu',
+    'link_title' => 'Manage Menu',
+    'menu_name' => 'manager', 
+    'weight' => -2,
+    'options' => array('attributes' => array('class' => array('main_menu'))),
+    'customized' => 1,
+    'language' => NULL,
+    'module' => 'menu',
+  );
+  menu_link_save($item);
+
+  // Default child elements 
+  $item = array(
+    'link_path' => 'admin/people/create',
+    'link_title' => 'Add People',
+    'menu_name' => 'manager', 
+    'weight' => 0,
+    'options' => array('attributes' => array('class' => array('add-users'))),
+    'customized' => 1,
+    'language' => NULL,
+    'plid' => $people_id, 
+    'module' => 'menu',
+  );
+  menu_link_save($item);
+
+  $item = array(
+    'link_path' => 'admin/people',
+    'link_title' => 'Manage People',
+    'menu_name' => 'manager', 
+    'weight' => -4,
+    'options' => array('attributes' => array('class' => array('users'))),
+    'customized' => 1,
+    'language' => NULL,
+    'plid' => $people_id, 
+    'module' => 'menu',
+  );
+  menu_link_save($item);
+
   // Create an image style for the users pic
   // $style = image_style_save(array(
   //   'name' => 'square_profile_pic',
@@ -53,7 +157,8 @@ function easy_admin_enable() {
   if (!field_info_field('field_profile_picture')) {
 
     // Creates the profile pic directory in the public files folder
-    $directory = 'public://profile_pic'; 
+    /*
+$directory = 'public://profile_pic'; 
     file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
 
     //File path in the module
@@ -75,6 +180,7 @@ function easy_admin_enable() {
     $file->status = 1;
 
     file_save($file);
+*/
 
     // Create image field for profile pic usage
     $field = array(
@@ -99,7 +205,7 @@ function easy_admin_enable() {
         'title_field' => 0,
         'max_resolution' => '',
         'min_resolution' => '200x200',
-        'preview_image_style' => 'square_profile_pic',
+        /* 'preview_image_style' => 'square_profile_pic', */
         'default_image' => 0,
         'user_register_form' => 1,
       ),
@@ -176,31 +282,6 @@ function easy_admin_page_alter(&$page) {
 }
 
 /**
- * Implementation of hook_overlay_child_initialize();
- *
- * Push down the overlay to prevent easy admin covering the top of the overlay,
- * also integrates with admin menu.
- */
-function easy_admin_overlay_child_initialize() {
-  global $user;
-  $offset = 0;
-
-  $show_easy_admin = easy_admin_enabled();
-  if ($show_easy_admin) {
-    $offset += 28;
-    $vars['classes_array'][] = 'easy-admin';
-  }
-  if (user_access('access administration menu')) {
-    $offset += 28;
-  }
-
-  if ($offset) {
-    drupal_add_css('body.overlay { padding-top: ' . $offset . 'px!important; }', array('type' => 'inline', 'group' => CSS_THEME+1));
-  }
-
-}
-
-/**
  *  Helper to create a data structure representing a menu item in the dropdown.
  *
  * @param string $title
@@ -227,16 +308,12 @@ function easy_admin_create_menu_item($title, $href, $classes = array(), $localiz
  */
 function easy_admin_output() {
 
-
-
   $menu_name = 'manager';
-  $menu_name_user = 'user-menu';
 
   $tree = easy_admin_get_tree($menu_name);
 
   return theme('easy_admin_toolbar', array('tree' => $tree));
 
-  krumo($variables);
 }
 
 /**
@@ -340,7 +417,6 @@ function theme_easy_admin_tree($variables) {
  *
  * @ingroup themeable
  */
-
 
 function theme_easy_admin_item($variables) {
 
