@@ -37,66 +37,11 @@ function easy_admin_enable() {
     ->condition('name', 'easy_admin')
     ->execute();
 
-  // Create a profile picture field so we can place it at the top
-  // of the admin menu
-  // Check if our field is not already created.
-  if (!field_info_field('field_profile_picture')) {
-
-    // Creates the profile pic directory in the public files folder
-    $directory = 'public://profile_pic'; 
-    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
-    //File path in the module
-    $file_path = drupal_get_path('module', 'easy_admin') . '/assets/img/profile.jpg'; 
-    // Save file to new location in public files folder
-    $file_move = file_unmanaged_copy($file_path, $directory, FILE_EXISTS_RENAME);
-
-    //
-    $file_uri = file_build_uri('profile_pic/profile.jpg');
-
-    $file_mime = file_get_mimetype($file_uri);
-
-    $file = new stdClass;
-    $file->uid = 1;
-    $file->filename = 'profile.jpg';
-    $file->uri = $file_uri;
-    $file->filemime = $file_mime;
-    $file->filesize = filesize($file_uri);
-    $file->status = 1;
-
-    file_save($file);
-
-
-    // Create image field for profile pic usage
-    $field = array(
-        'field_name' => 'field_profile_picture', 
-        'type' => 'image', 
-    );
-    field_create_field($field);
-
-    // Create the instance on the bundle.
-    $instance = array(
-      'field_name' => 'field_profile_picture',
-      'entity_type' => 'user',
-      'bundle' => 'user',
-      'label' => 'Profile Picture',
-      'description' => 'Profile picture to represent you.',
-      'required' => TRUE,
-      'settings' => array(
-        'file_extensions' => 'png jpg jpeg',
-        'file_directory' => 'profile_pic',
-        'max_filesize' => '20 MB',
-        'alt_field' => 1,
-        'title_field' => 0,
-        'max_resolution' => '',
-        'min_resolution' => '200x200',
-        'preview_image_style' => 'square_profile_pic', 
-        'default_image' => 0,
-        'user_register_form' => 1,
-      ),
-    );
-    field_create_instance($instance);
-  }
-
+  // Tell user that the module was installed and how to configure it.
+  $t = get_t();
+  $link = l($t('Administration > Configuration > Easy admin'), 'admin/config/easy_admin');
+  $text = $t("Easy admin was installed. It can be configured here: " . $link);
+  drupal_set_message(filter_xss_admin($text));
 }
 
 /**
