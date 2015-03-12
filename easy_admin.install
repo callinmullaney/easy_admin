@@ -9,6 +9,119 @@
  */
 function easy_admin_install() {
 
+  // Create the client admin menu
+  $menu = array(
+        'menu_name' => 'manager',
+        'title' => 'Manager Menu',
+        'description' => 'Links for content managers that dont need access to all the developer/admin stuff.'
+    );
+  menu_save($menu);
+  
+  // Add menu items to the new manager menu - Parent Items
+  $item = array(
+    'link_path' => '<front>',
+    'link_title' => 'Home',
+    'menu_name' => 'manager', 
+    'weight' => -10,
+    'options' => array('attributes' => array('class' => array('home'))),
+    'customized' => 1,
+    'language' => NULL,
+    'module' => 'menu',
+  );
+  menu_link_save($item);
+
+  $item = array(
+    'link_path' => '<nolink>',
+    'link_title' => 'Add Content',
+    'menu_name' => 'manager', 
+    'weight' => -8,
+    'options' => array('attributes' => array('class' => array('add'))),
+    'customized' => 1,
+    'language' => NULL,
+    'module' => 'menu',
+  );
+  menu_link_save($item);
+
+  $item = array(
+    'link_path' => '<nolink>',
+    'link_title' => 'Manage Content',
+    'menu_name' => 'manager', 
+    'weight' => -6,
+    'options' => array('attributes' => array('class' => array('manage'))),
+    'customized' => 1,
+    'language' => NULL,
+    'module' => 'menu',
+  );
+  menu_link_save($item);
+
+  $item = array(
+    'link_path' => '<nolink>',
+    'link_title' => 'People',
+    'menu_name' => 'manager', 
+    'weight' => -4,
+    'options' => array('attributes' => array('class' => array('users'))),
+    'customized' => 1,
+    'language' => NULL,
+    'module' => 'menu',
+  );
+  $people_id = menu_link_save($item);
+
+  $item = array(
+    'link_path' => 'admin/structure/menu/manage/main-menu',
+    'link_title' => 'Manage Menu',
+    'menu_name' => 'manager', 
+    'weight' => -2,
+    'options' => array('attributes' => array('class' => array('main_menu'))),
+    'customized' => 1,
+    'language' => NULL,
+    'module' => 'menu',
+  );
+  menu_link_save($item);
+
+  // Default child elements 
+  $item = array(
+    'link_path' => 'admin/people/create',
+    'link_title' => 'Add People',
+    'menu_name' => 'manager', 
+    'weight' => 0,
+    'options' => array('attributes' => array('class' => array('add-users'))),
+    'customized' => 1,
+    'language' => NULL,
+    'plid' => $people_id, 
+    'module' => 'menu',
+  );
+  menu_link_save($item);
+
+  $item = array(
+    'link_path' => 'admin/people',
+    'link_title' => 'Manage People',
+    'menu_name' => 'manager', 
+    'weight' => -4,
+    'options' => array('attributes' => array('class' => array('users'))),
+    'customized' => 1,
+    'language' => NULL,
+    'plid' => $people_id, 
+    'module' => 'menu',
+  );
+  menu_link_save($item);
+
+  // Create an image style for the users pic
+  $style = image_style_save(array(
+    'name' => 'square_profile_pic',
+    'label' => 'Square - Profile Pic')
+  );
+  $effect = array(
+    'name' => 'image_scale_and_crop',
+    'data' => array(
+      'width' => 150,
+      'height' => 150,
+      'upscale' => TRUE,
+    ),
+    'isid' => $style['isid'],
+  );
+  image_effect_save($effect);
+  image_style_flush($style);
+
   // Tell user that the module was installed and how to configure it.
   $t = get_t();
   $link = l($t('Administration > Configuration > Easy admin'), 'admin/config/easy_admin');

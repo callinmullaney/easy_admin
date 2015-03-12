@@ -37,130 +37,14 @@ function easy_admin_enable() {
     ->condition('name', 'easy_admin')
     ->execute();
 
-  // Create the client admin menu
-  $menu = array(
-        'menu_name' => 'manager',
-        'title' => 'Manager Menu',
-        'description' => 'Links for content managers that dont need access to all the developer/admin stuff.'
-    );
-  menu_save($menu);
-  
-  // Add menu items to the new manager menu - Parent Items
-  $item = array(
-    'link_path' => '<front>',
-    'link_title' => 'Home',
-    'menu_name' => 'manager', 
-    'weight' => -10,
-    'options' => array('attributes' => array('class' => array('home'))),
-    'customized' => 1,
-    'language' => NULL,
-    'module' => 'menu',
-  );
-  menu_link_save($item);
-
-  $item = array(
-    'link_path' => '<nolink>',
-    'link_title' => 'Add Content',
-    'menu_name' => 'manager', 
-    'weight' => -8,
-    'options' => array('attributes' => array('class' => array('add'))),
-    'customized' => 1,
-    'language' => NULL,
-    'module' => 'menu',
-  );
-  menu_link_save($item);
-
-  $item = array(
-    'link_path' => '<nolink>',
-    'link_title' => 'Manage Content',
-    'menu_name' => 'manager', 
-    'weight' => -6,
-    'options' => array('attributes' => array('class' => array('manage'))),
-    'customized' => 1,
-    'language' => NULL,
-    'module' => 'menu',
-  );
-  menu_link_save($item);
-
-  $item = array(
-    'link_path' => '<nolink>',
-    'link_title' => 'People',
-    'menu_name' => 'manager', 
-    'weight' => -4,
-    'options' => array('attributes' => array('class' => array('users'))),
-    'customized' => 1,
-    'language' => NULL,
-    'module' => 'menu',
-  );
-  $people_id = menu_link_save($item);
-
-  $item = array(
-    'link_path' => 'admin/structure/menu/manage/main-menu',
-    'link_title' => 'Manage Menu',
-    'menu_name' => 'manager', 
-    'weight' => -2,
-    'options' => array('attributes' => array('class' => array('main_menu'))),
-    'customized' => 1,
-    'language' => NULL,
-    'module' => 'menu',
-  );
-  menu_link_save($item);
-
-  // Default child elements 
-  $item = array(
-    'link_path' => 'admin/people/create',
-    'link_title' => 'Add People',
-    'menu_name' => 'manager', 
-    'weight' => 0,
-    'options' => array('attributes' => array('class' => array('add-users'))),
-    'customized' => 1,
-    'language' => NULL,
-    'plid' => $people_id, 
-    'module' => 'menu',
-  );
-  menu_link_save($item);
-
-  $item = array(
-    'link_path' => 'admin/people',
-    'link_title' => 'Manage People',
-    'menu_name' => 'manager', 
-    'weight' => -4,
-    'options' => array('attributes' => array('class' => array('users'))),
-    'customized' => 1,
-    'language' => NULL,
-    'plid' => $people_id, 
-    'module' => 'menu',
-  );
-  menu_link_save($item);
-
-  // Create an image style for the users pic
-  // $style = image_style_save(array(
-  //   'name' => 'square_profile_pic',
-  //   'label' => 'Square - Profile Pic')
-  // );
-  // $effect = array(
-  //   'name' => 'image_scale_and_crop',
-  //   'data' => array(
-  //     'width' => 150,
-  //     'height' => 150,
-  //     'upscale' => TRUE,
-  //   ),
-  //   'isid' => $style['isid'],
-  // );
-  // image_effect_save($effect);
-
-  // image_style_flush($style);
-
   // Create a profile picture field so we can place it at the top
   // of the admin menu
   // Check if our field is not already created.
   if (!field_info_field('field_profile_picture')) {
 
     // Creates the profile pic directory in the public files folder
-    /*
-$directory = 'public://profile_pic'; 
+    $directory = 'public://profile_pic'; 
     file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
-
     //File path in the module
     $file_path = drupal_get_path('module', 'easy_admin') . '/assets/img/profile.jpg'; 
     // Save file to new location in public files folder
@@ -180,7 +64,7 @@ $directory = 'public://profile_pic';
     $file->status = 1;
 
     file_save($file);
-*/
+
 
     // Create image field for profile pic usage
     $field = array(
@@ -205,7 +89,7 @@ $directory = 'public://profile_pic';
         'title_field' => 0,
         'max_resolution' => '',
         'min_resolution' => '200x200',
-        /* 'preview_image_style' => 'square_profile_pic', */
+        'preview_image_style' => 'square_profile_pic', 
         'default_image' => 0,
         'user_register_form' => 1,
       ),
@@ -241,6 +125,7 @@ function easy_admin_enabled() {
 }
 
 function easy_admin_preprocess_html(&$vars) {
+  // Add a body class if easy admin is present 
   if (easy_admin_enabled()) {
     $vars['classes_array'][] = 'easy-admin-menu';
   }
