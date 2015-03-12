@@ -39,14 +39,14 @@ body.easy-admin-menu {
 
 .easy-admin:hover .manager-menu li a,
 .easy-admin:hover .manager-menu li span.nolink,
-.easy-admin:hover ul.user li a {
+.easy-admin:hover ul.logout li a {
 
 }
 .easy-admin ul.manager-menu,
-.easy-admin ul.user {
+.easy-admin ul.logout {
   margin: 0;
 }
-.easy-admin ul.user {
+.easy-admin ul.logout {
   position: fixed;
   bottom: 2%;
 }
@@ -56,7 +56,7 @@ body.easy-admin-menu {
 }
 .easy-admin .manager-menu li a,
 .easy-admin .manager-menu li span.nolink,
-.easy-admin ul.user li a {
+.easy-admin ul.logout li a {
   display: block;
   width: 100%;
   padding: 0 30px;
@@ -70,13 +70,13 @@ body.easy-admin-menu {
   letter-spacing: .06em;
   border-left: 2px solid transparent;
 }
-.easy-admin ul.user li a {
+.easy-admin ul.logout li a {
   
 }
 
 .easy-admin .manager-menu li a:hover,
 .easy-admin .manager-menu li span.nolink:hover,
-.easy-admin ul.user li a:hover {
+.easy-admin ul.logout li a:hover {
   background: #000;
   border-color: #0074BD;
 }
@@ -85,7 +85,7 @@ body.easy-admin-menu {
 }
 
 .easy-admin ul.manager-menu li,
-.easy-admin ul.user li {
+.easy-admin ul.logout li {
   display: block;
 }
 
@@ -111,7 +111,7 @@ body.easy-admin-menu {
 }
 
 .easy-admin .manager-menu > li span:not(.nolink),
-.easy-admin .user > li span:not(.nolink) {
+.easy-admin .logout > li span:not(.nolink) {
   display: inline-block;
   opacity: 0;
   max-width: 0;
@@ -124,7 +124,7 @@ body.easy-admin-menu {
 }
 
 .easy-admin:hover .manager-menu > li span:not(nolink),
-.easy-admin:hover .user > li span:not(nolink) {
+.easy-admin:hover .logout > li span:not(nolink) {
   opacity: 1;
   max-width: 260px;
 }
@@ -139,6 +139,9 @@ body.easy-admin-menu {
   background: -o-linear-gradient(top,  #222222 29%,#0c0c0c 100%); /* Opera 11.10+ */
   background: -ms-linear-gradient(top,  #222222 29%,#0c0c0c 100%); /* IE10+ */
   background: linear-gradient(to bottom,  #222222 29%,#0c0c0c 100%); /* W3C */
+}
+.manager-menu .manager-menu.active {
+  z-index: 200;
 }
 
 button.back {
@@ -179,7 +182,7 @@ button.back:focus {
 
 
 .easy-admin ul.manager-menu li i,
-.easy-admin ul.user li i {
+.easy-admin ul.logout li i {
   display: inline-block;
   vertical-align: middle;
   margin-right: 15px;
@@ -209,7 +212,7 @@ button.back:focus {
   background-image: url('../img/menu-icon.png');
 }
 
-.easy-admin ul.user li i {
+.easy-admin ul.logout li i {
   height: 23px;
   background-image: url('../img/logout-icon.png');
 }

@@ -42,6 +42,7 @@ function easy_admin_enable() {
   $link = l($t('Administration > Configuration > Easy admin'), 'admin/config/easy_admin');
   $text = $t("Easy admin was installed. It can be configured here: " . $link);
   drupal_set_message(filter_xss_admin($text));
+
 }
 
 /**
@@ -160,10 +161,50 @@ function theme_easy_admin_toolbar($variables) {
   drupal_add_css(drupal_get_path('module', 'easy_admin') . '/assets/css/easy_admin.css');
 
   $tree = $variables['tree'];
+  global $user;
+  $user = user_load($user->uid);
+  $style = 'square_profile_pic';
 
+  $info = field_info_instance('user', 'field_profile_picture', 'user');
+  $default_fid = $info['settings']['default_image'];
+  $default_img = file_load($default_fid);
+
+  // if this field exists create a variable that points to the file uri
+  if(!empty($user->field_profile_picture)) {
+    $profile_pic = $user->field_profile_picture['und']['0'];
+    $profile_pic_uri = $profile_pic['uri'];
+  }
+
+  // if a custom img is set assign that to a varaible or
+  // assign the default image to the variable.
+  if (!empty($default_img) && !empty($profile_pic_uri)) {
+    $img_url = $profile_pic_uri; 
+    // krumo($img_url);
+    // echo "profile set";
+  }elseif (!empty($default_img) && empty($profile_pic_uri)) {
+    $img_url = $default_img->uri;  
+    // krumo($img_url);
+    // echo "default img set";
+    // $default_img_object = file_load($default_fid);
+  }else {
+    $img_url = NULL;
+  }
+  //Build the html structure of the easy admin
   $html = '<div class="easy-admin"><div class="firstLevel">';
+
+  $html .= '<ul class="current-user"><li>';
+  if ($img_url != NULL) {
+    $html .= '<img src="' . image_style_url($style, $img_url) . ' alt="profile" />';
+  }
+  $html .= '<span>Welcome</span>';
+  $html .= $user->name;
+  $html .= '</li></ul>';
+
   $html .= theme('easy_admin_tree', array('tree' => $tree));
+  // User Logout button
+  $html .= '<ul class="logout"><li><a href="/user/logout" title="User Logout"> <i></i> <span>Logout</span></a></li></ul>';
   $html .= '</div></div>';
+  
   return $html;
 }
 
@@ -178,55 +219,12 @@ function theme_easy_admin_toolbar($variables) {
  * @ingroup themeable
  */
 function theme_easy_admin_tree($variables) {
-
-  global $user;
-  $user = user_load($user->uid);
-  $style = 'square_profile_pic';
   $menu_items = $variables['tree'];
-
-  $info = field_info_instance('user', 'field_profile_picture', 'user');
-  $default_img = $info['settings']['default_image'];
-
-  // if this field exists create a variable that points to the file uri
-  if(!empty($user->field_profile_picture)) {
-    $profile_pic = $user->field_profile_picture['und']['0'];
-    $profile_pic_uri = $profile_pic['uri'];
-  }
-
-  // if a custom img is set assign that to a varaible or
-  // assign the default image to the variable.
-  if (!empty($info) && !empty($profile_pic_uri)) {
-    $img_url = $profile_pic_uri; 
-    // krumo($img_url);
-    // echo "profile set";
-  }elseif (!empty($info) && empty($profile_pic_uri)) {
-    $default_fid = $info['settings']['default_image'];
-    $img_url = $default_fid->uri;  
-    // krumo($img_url);
-    // echo "default img set";
-    // $default_img_object = file_load($default_fid);
-  }else {
-    $img_url = NULL;
-  }
-
-  // Build the user unordered list
-  $html = '<ul class="current-user"><li>';
-  if ($img_url != NULL) {
-    $html .= '<img src="' . image_style_url($style, $img_url) . ' alt="profile" />';
-  }
-  $html .= $user->name;
-  $html .= '</li></ul>';
-
   // Build the admin menu unordered list from 'manager-menu'
-  $html .= '<ul class="manager-menu">';
+  $html = '<ul class="manager-menu">';
   foreach ($menu_items as $menu_item) {
     $html .= theme('easy_admin_item', array('menu_item' => $menu_item));
   }
-  $html .= '</ul>';
-
-  // Build the logout unordered list
-  $html .= '<ul class="user">';
-  $html .= '<li><a href="/user/logout" title="User Logout"> <i></i> <span>Logout</span></a></li>';
   $html .= '</ul>';
 
   // Return all of it
@@ -253,10 +251,10 @@ function theme_easy_admin_item($variables) {
   $menu_item = $variables['menu_item'];
   
   if (isset($menu_item['localized_options']['attributes']['class'][0])) {
-  	$menu_item_class = $menu_item['localized_options']['attributes']['class'][0];
-  	$html = '<li class="' . $menu_item_class . '">';
+    $menu_item_class = $menu_item['localized_options']['attributes']['class'][0];
+    $html = '<li class="' . $menu_item_class . '">';
   } else {
-  	$html = '<li class="placeholder">';
+    $html = '<li class="placeholder">';
   }
   $html .= l($menu_item['title'], $menu_item['href'], $menu_item['localized_options']);
   if (isset($menu_item['children'])) {

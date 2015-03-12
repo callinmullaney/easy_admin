@@ -150,11 +150,22 @@ function easy_admin_install() {
 
     file_save($file);
 
-
     // Create image field for profile pic usage
     $field = array(
         'field_name' => 'field_profile_picture', 
         'type' => 'image', 
+        'settings' => array(
+          'file_extensions' => 'png jpg jpeg',
+          'file_directory' => 'profile_pic',
+          'max_filesize' => '20 MB',
+          'alt_field' => 1,
+          'title_field' => 0,
+          'max_resolution' => '',
+          'min_resolution' => '200x200',
+          'default_image' => $file->fid,
+          'preview_image_style' => 'square_profile_pic', 
+          'user_register_form' => 1,
+        ),
     );
     field_create_field($field);
 
@@ -174,8 +185,8 @@ function easy_admin_install() {
         'title_field' => 0,
         'max_resolution' => '',
         'min_resolution' => '200x200',
+        'default_image' => $file->fid,
         'preview_image_style' => 'square_profile_pic', 
-        'default_image' => 0,
         'user_register_form' => 1,
       ),
     );

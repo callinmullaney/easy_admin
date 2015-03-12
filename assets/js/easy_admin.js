@@ -1,22 +1,32 @@
 (function ($, Drupal) {
 
-  function resetMenu() {
-    myTimer = setTimeout(function () {
-      $('.easy-admin').removeClass('secondLevel');
-    }, 1000);
-  }
   function clearTimer () {
-    clearTimeout(myTimer);
+    clearTimeout(timer);
+  }
+
+  function resetMenu() {
+    timer = setTimeout(function () {
+      $('.easy-admin').removeClass('secondLevel');
+      $('.easy-admin ul').removeClass('active');
+    }, 1000);
   }
 
   $(document).ready(function() {
-    $('.manager-menu > li > a,.manager-menu > li > span').wrapInner('<span />');
+    $('.manager-menu > li > a,.manager-menu > li > span,ul.user > li > a').wrapInner('<span />');
 
     // sub nav functionality
     $('.manager-menu a,.manager-menu span.nolink').click(function(e) {
       if ($(this).parent().find('ul').length) {
         e.preventDefault();
+        $(this).parent().find('ul').addClass('active');
         $('.easy-admin').addClass('secondLevel');
+      }
+    });
+
+    // add "hasdropdown" class to list items that have children
+    $('.manager-menu li').each(function() {
+      if ($(this).find('ul').length) {
+        $(this).addClass('hasdropdown');
       }
     });
 
@@ -26,6 +36,7 @@
     // back button functionality
     $('.easy-admin button.back').click(function() {
       $('.easy-admin').removeClass('secondLevel');
+      $('.easy-admin ul').removeClass('active');
     });
 
     // add icon to links - needs to be added to module
