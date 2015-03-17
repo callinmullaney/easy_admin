@@ -1,7 +1,21 @@
 /*=======================
+  Fonts
+========================*/
+@font-face {
+    font-family: 'ropa_sansregular';
+    src: url('../fonts/RopaSans-Regular-webfont.eot');
+    src: url('../fonts/RopaSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/RopaSans-Regular-webfont.woff2') format('woff2'),
+         url('../fonts/RopaSans-Regular-webfont.woff') format('woff'),
+         url('../fonts/RopaSans-Regular-webfont.ttf') format('truetype'),
+         url('../fonts/RopaSans-Regular-webfont.svg#ropa_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*=======================
   Offset the body if menu present
 ========================*/
-
 body.easy-admin-menu {
   margin-left: 90px;
 }
@@ -26,10 +40,11 @@ body.easy-admin-menu {
   background: -o-linear-gradient(top,  #333333 29%,#0c0c0c 100%); /* Opera 11.10+ */
   background: -ms-linear-gradient(top,  #333333 29%,#0c0c0c 100%); /* IE10+ */
   background: linear-gradient(to bottom,  #333333 29%,#0c0c0c 100%); /* W3C */
-  border-bottom: 1px solid #4e4e4e;
+  -webkit-transition: all .6s ease;
   transition: all .6s ease;
   overflow: hidden;
   box-shadow: 0 0 2px rgba(0,0,0,0);
+  font-family: 'ropa_sansregular', sans-serif;
 }
 
 .easy-admin:hover {
@@ -42,18 +57,22 @@ body.easy-admin-menu {
 .easy-admin:hover ul.logout li a {
 
 }
+
 .easy-admin ul.manager-menu,
 .easy-admin ul.logout {
   margin: 0;
 }
+
 .easy-admin ul.logout {
   position: fixed;
+  width: 260px;
   bottom: 2%;
 }
 
 .easy-admin .manager-menu li {
   display: block;
 }
+
 .easy-admin .manager-menu li a,
 .easy-admin .manager-menu li span.nolink,
 .easy-admin ul.logout li a {
@@ -63,25 +82,21 @@ body.easy-admin-menu {
   line-height: 50px;
   white-space: nowrap;
   color: #fff;
-  transition: all .3s ease;
-  font-family: 'Ropa Sans', sans-serif;
+  transition: all .6s ease;
+  -webkit-transition: all .6s ease;
+  font-family: 'ropa_sansregular', sans-serif;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: .06em;
-  border-left: 2px solid transparent;
-}
-.easy-admin ul.logout li a {
-  
+  border-left: 3px solid transparent;
+  cursor: pointer;
 }
 
 .easy-admin .manager-menu li a:hover,
 .easy-admin .manager-menu li span.nolink:hover,
 .easy-admin ul.logout li a:hover {
   background: #000;
-  border-color: #0074BD;
-}
-
-.easy-admin ul.manager-menu ul {
+  border-color: #32ade6;
 }
 
 .easy-admin ul.manager-menu li,
@@ -96,6 +111,7 @@ body.easy-admin-menu {
   right: -260px;
   width: 260px;
   top: 0;
+  -webkit-transition: all .6s ease;
   transition: all .6s ease;
 }
 
@@ -103,6 +119,7 @@ body.easy-admin-menu {
   position: absolute;
   width: 100%;
   left: 0;
+  -webkit-transition: all .6s ease;
   transition: all .6s ease;
 }
 
@@ -119,7 +136,8 @@ body.easy-admin-menu {
   white-space: nowrap;
   display: inline-block;
   vertical-align: middle;
-  transition: .6s ease;
+  -webkit-transition: all .6s ease;
+  transition: all .6s ease;
   cursor: pointer;
 }
 
@@ -140,6 +158,7 @@ body.easy-admin-menu {
   background: -ms-linear-gradient(top,  #222222 29%,#0c0c0c 100%); /* IE10+ */
   background: linear-gradient(to bottom,  #222222 29%,#0c0c0c 100%); /* W3C */
 }
+
 .manager-menu .manager-menu.active {
   z-index: 200;
 }
@@ -148,10 +167,11 @@ button.back {
   background: transparent;
   width: 100%;
   border: 0;
-  font-family: 'Ropa Sans', sans-serif;
+  font-family: 'ropa_sansregular', sans-serif;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: .06em;
+  -webkit-transition: all .3s ease;
   transition: all .3s ease;
   margin: 0;
   text-align: left;
@@ -177,10 +197,9 @@ button.back:focus {
   font-size: 18px;
 }
 
-
-
-
-
+/*=======================
+  Icons
+========================*/
 .easy-admin ul.manager-menu li i,
 .easy-admin ul.logout li i {
   display: inline-block;
@@ -195,21 +214,29 @@ button.back:focus {
   height: 18px;
   background: url('../img/home-icon.png') no-repeat;
 }
+
 .easy-admin ul.manager-menu li.add i {
   height: 22px;
   background: url('../img/plus-icon.png') no-repeat;
 }
+
 .easy-admin ul.manager-menu li.manage i {
   height: 20px;
   background-image: url('../img/manage-icon.png');
 }
+
 .easy-admin ul.manager-menu li.users i {
   height: 13px;
   background-image: url('../img/users-icon.png');
 }
+
 .easy-admin ul.manager-menu li.main_menu i {
   height: 17px;
   background-image: url('../img/menu-icon.png');
+}
+
+.easy-admin ul.manager-menu li.settings i {
+  background-image: url('../img/settings-icon.png');
 }
 
 .easy-admin ul.logout li i {
@@ -219,4 +246,54 @@ button.back:focus {
 
 .easy-admin ul.manager-menu li ul li i:before {
   display: none !important;
+}
+
+
+/*=======================
+  User info
+========================*/
+.current-user {
+  margin: 20px 0;
+}
+
+.current-user li:first-child a:first-child {
+  width: 60px;
+  margin: 0 auto;
+  border-radius: 30px;
+  overflow: hidden;
+  visibility: visible;
+  opacity: 1;
+  margin-bottom: 10px;
+  border: 2px solid #222;
+}
+
+.current-user span {
+  font-size: 12px;
+  color: #999;
+}
+
+.current-user a,
+.current-user span {
+  visibility: hidden;
+  opacity: 0;
+  white-space: nowrap;
+  -webkit-transition: all .6s ease;
+  transition: all .6s ease;
+  text-align: center;
+  display: block;
+}
+
+.current-user a {
+  color: #fff;
+  text-transform: capitalize;
+}
+
+.current-user a:hover {
+  color: #fff;
+}
+
+.easy-admin:hover .current-user a,
+.easy-admin:hover .current-user span {
+  visibility: visible;
+  opacity: 1;
 }

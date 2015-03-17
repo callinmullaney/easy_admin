@@ -194,7 +194,7 @@ function theme_easy_admin_toolbar($variables) {
 
   $html .= '<ul class="current-user"><li>';
   if ($img_url != NULL) {
-    $html .= '<img src="' . image_style_url($style, $img_url) . ' alt="profile" />';
+    $html .= '<img src="' . image_style_url($style, $img_url) . '" alt="profile" />';
   }
   $html .= '<span>Welcome</span>';
   $html .= $user->name;
