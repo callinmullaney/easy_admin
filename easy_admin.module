@@ -179,13 +179,8 @@ function theme_easy_admin_toolbar($variables) {
   // assign the default image to the variable.
   if (!empty($default_img) && !empty($profile_pic_uri)) {
     $img_url = $profile_pic_uri; 
-    // krumo($img_url);
-    // echo "profile set";
   }elseif (!empty($default_img) && empty($profile_pic_uri)) {
     $img_url = $default_img->uri;  
-    // krumo($img_url);
-    // echo "default img set";
-    // $default_img_object = file_load($default_fid);
   }else {
     $img_url = NULL;
   }
@@ -194,10 +189,14 @@ function theme_easy_admin_toolbar($variables) {
 
   $html .= '<ul class="current-user"><li>';
   if ($img_url != NULL) {
+    $html .= '<a href="/user/' . $user->uid . '/edit" title="Edit My Profile">';
     $html .= '<img src="' . image_style_url($style, $img_url) . '" alt="profile" />';
+    $html .= '</a>';
   }
   $html .= '<span>Welcome</span>';
+  $html .= '<a href="/user/' . $user->uid . '/edit" title="Edit My Profile">';
   $html .= $user->name;
+  $html .= '</a>';
   $html .= '</li></ul>';
 
   $html .= theme('easy_admin_tree', array('tree' => $tree));
