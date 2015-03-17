@@ -78,12 +78,24 @@ function easy_admin_install() {
   );
   menu_link_save($item);
 
+  $item = array(
+    'link_path' => '<nolink>',
+    'link_title' => 'Settings',
+    'menu_name' => 'manager', 
+    'weight' => 0,
+    'options' => array('attributes' => array('class' => array('settings'))),
+    'customized' => 1,
+    'language' => NULL,
+    'module' => 'menu',
+  );
+  $settings_id = menu_link_save($item);
+
   // Default child elements 
   $item = array(
     'link_path' => 'admin/people/create',
     'link_title' => 'Add People',
     'menu_name' => 'manager', 
-    'weight' => 0,
+    'weight' => -2,
     'options' => array('attributes' => array('class' => array('add-users'))),
     'customized' => 1,
     'language' => NULL,
@@ -91,16 +103,27 @@ function easy_admin_install() {
     'module' => 'menu',
   );
   menu_link_save($item);
-
   $item = array(
     'link_path' => 'admin/people',
     'link_title' => 'Manage People',
     'menu_name' => 'manager', 
-    'weight' => -4,
+    'weight' => 0,
     'options' => array('attributes' => array('class' => array('users'))),
     'customized' => 1,
     'language' => NULL,
     'plid' => $people_id, 
+    'module' => 'menu',
+  );
+  menu_link_save($item);
+  $item = array(
+    'link_path' => 'admin/config/search/redirect',
+    'link_title' => 'URL Redirects',
+    'menu_name' => 'manager', 
+    'weight' => 0,
+    'options' => array('attributes' => array('class' => array('redirect'))),
+    'customized' => 1,
+    'language' => NULL,
+    'plid' => $settings_id, 
     'module' => 'menu',
   );
   menu_link_save($item);
