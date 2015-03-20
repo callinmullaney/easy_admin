@@ -111,6 +111,7 @@ body.easy-admin-menu {
   right: -260px;
   width: 260px;
   top: 0;
+  overflow-y: scroll;
   -webkit-transition: all .6s ease;
   transition: all .6s ease;
 }
