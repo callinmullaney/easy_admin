@@ -259,7 +259,8 @@ button.back:focus {
 }
 
 .current-user li:first-child a:first-child {
-  width: 60px;
+  width: 65px;
+  height: 65px;
   margin: 0 auto;
   border-radius: 30px;
   overflow: hidden;
@@ -288,6 +289,11 @@ button.back:focus {
 .current-user a {
   color: #fff;
   text-transform: capitalize;
+}
+.current-user a img {
+	max-width: 100%;
+	height: auto;
+	position: relative;
 }
 
 .current-user a:hover {
