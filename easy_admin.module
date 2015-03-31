@@ -39,7 +39,7 @@ function easy_admin_enable() {
 
   // Tell user that the module was installed and how to configure it.
   $t = get_t();
-  $link = l($t('Administration > Configuration > Easy admin'), 'admin/config/easy_admin');
+  $link = l($t('Manager Menu'), 'admin/structure/menu/manage/manager');
   $text = $t("Easy admin was installed. It can be configured here: " . $link);
   drupal_set_message(filter_xss_admin($text));
 
