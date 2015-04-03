@@ -1,5 +1,7 @@
 (function ($, Drupal) {
 
+  timer = 0;
+
   function clearTimer () {
     clearTimeout(timer);
   }
@@ -12,6 +14,7 @@
   }
 
   $(document).ready(function() {
+
     $('.manager-menu > li > a,.manager-menu > li > span,ul.user > li > a').wrapInner('<span />');
 
     // sub nav functionality
