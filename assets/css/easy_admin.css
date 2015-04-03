@@ -259,10 +259,10 @@ button.back:focus {
 }
 
 .current-user li:first-child a:first-child {
-  width: 65px;
-  height: 65px;
+  width: 64px;
+  height: 64px;
   margin: 0 auto;
-  border-radius: 30px;
+  border-radius: 32px;
   overflow: hidden;
   visibility: visible;
   opacity: 1;
