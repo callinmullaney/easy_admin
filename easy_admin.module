@@ -96,9 +96,9 @@ function easy_admin_page_alter(&$page) {
   }
 
   // Do not show menu on dialog page in the "media" module.
-  if ($page['#theme'] == 'media_dialog_page') {
-    return '';
-  }
+  if (!isset($page['#theme'])) {
+     return '';
+   }
 
   // Do not show menu on dialog created by references dialog module (https://drupal.org/project/references_dialog)
   if ($page['#theme'] == 'references_dialog_page') {
