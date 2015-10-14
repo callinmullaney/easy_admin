@@ -55,7 +55,7 @@ function easy_admin_enabled() {
   if((int)$user->uid === 1 && (bool)variable_get('easy_admin_show_root', 1)) {
     return TRUE;
   }
-  
+
   // Determine if the "easy_admin_show_roles" setting grants access
   // This is done by intersecting the roles that are enabled in easy admin
   // settings with the roles that the current user has (plus anonymous).
@@ -71,7 +71,7 @@ function easy_admin_enabled() {
 }
 
 function easy_admin_preprocess_html(&$vars) {
-  // Add a body class if easy admin is present 
+  // Add a body class if easy admin is present
   if (easy_admin_enabled()) {
     $vars['classes_array'][] = 'easy-admin-menu';
   }
@@ -100,10 +100,15 @@ function easy_admin_page_alter(&$page) {
      return '';
    }
 
+   // Hide menu if exo is present
+   if (function_exists('exo_frame_view')) {
+    return '';
+   }
+
   // Do not show menu on dialog created by references dialog module (https://drupal.org/project/references_dialog)
   if ($page['#theme'] == 'references_dialog_page') {
     return '';
-  }  
+  }
 
   $page['page_top']['easy_admin'] = array(
     '#markup' => easy_admin_output(),
@@ -178,9 +183,9 @@ function theme_easy_admin_toolbar($variables) {
   // if a custom img is set assign that to a varaible or
   // assign the default image to the variable.
   if (!empty($default_img) && !empty($profile_pic_uri)) {
-    $img_url = $profile_pic_uri; 
+    $img_url = $profile_pic_uri;
   }elseif (!empty($default_img) && empty($profile_pic_uri)) {
-    $img_url = $default_img->uri;  
+    $img_url = $default_img->uri;
   }else {
     $img_url = NULL;
   }
@@ -203,7 +208,7 @@ function theme_easy_admin_toolbar($variables) {
   // User Logout button
   $html .= '<ul class="logout"><li><a href="/user/logout" title="User Logout"> <i></i> <span>Logout</span></a></li></ul>';
   $html .= '</div></div>';
-  
+
   return $html;
 }
 
@@ -248,7 +253,7 @@ function theme_easy_admin_tree($variables) {
 function theme_easy_admin_item($variables) {
 
   $menu_item = $variables['menu_item'];
-  
+
   if (isset($menu_item['localized_options']['attributes']['class'][0])) {
     $menu_item_class = $menu_item['localized_options']['attributes']['class'][0];
     $html = '<li class="' . $menu_item_class . '">';
